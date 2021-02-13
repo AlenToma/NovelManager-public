@@ -28,11 +28,11 @@ please dont forget to leave a review on google play to improve the app.
 * More sources will be added later.
 
 ## Issue
-* [Source request](https://github.com/AlenToma/NovelManager/issues/new?assignees=&labels=enhancement&template=source-request.md&title=Source+Request)
+* [Source request](https://github.com/AlenToma/NovelManager-public/issues/new?assignees=&labels=&template=source-request.md&title=)
  
-* [Bug report](https://github.com/AlenToma/NovelManager/issues/new?assignees=&labels=&template=bug_report.md&title=)
+* [Bug report](https://github.com/AlenToma/NovelManager-public/issues/new?assignees=&labels=&template=bug_report.md&title=)
  
-* [Feature request](https://github.com/AlenToma/NovelManager/issues/new?assignees=&labels=&template=feature_request.md&title=)
+* [Feature request](https://github.com/AlenToma/NovelManager-public/issues/new?assignees=&labels=&template=feature_request.md&title=)
 
 ## Sources
 Those are the available sources and also sources that will be implemented in the future
