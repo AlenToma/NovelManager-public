@@ -26,6 +26,7 @@ please dont forget to leave a review on google play to improve the app.
 * Auto update features, mening you get the latest update without downloading it from google play.
 * Text to speech is implemented.
 * More sources will be added later.
+* Text translator, read the novel in your favorit language.
 
 ## Issue
 * [Source request](https://github.com/AlenToma/NovelManager-public/issues/new?assignees=&labels=&template=source-request.md&title=)
