@@ -60,14 +60,14 @@ Those are the available sources and also sources that will be implemented in the
 | [ChapterUpdates](https://www.chapterupdates.com)  | Not Yet  |
 
 <div>
-
-<img style="margin-left:5px" src="https://github.com/AlenToma/NovelManager-public/blob/main/Screenshots/Screenshot_20210130-051921_NovelManager.jpg?raw=true" width="150">
-<img style="margin-left:5px" src="https://github.com/AlenToma/NovelManager-public/blob/main/Screenshots/Screenshot_20210130-051951_NovelManager.jpg?raw=true" width="150">
-<img style="margin-left:5px" src="https://github.com/AlenToma/NovelManager-public/blob/main/Screenshots/Screenshot_20210130-051958_NovelManager.jpg?raw=true" width="150">
-<img style="margin-left:5px" src="https://github.com/AlenToma/NovelManager-public/blob/main/Screenshots/Screenshot_20210130-052020_NovelManager.jpg?raw=true" width="150">
-<img style="margin-left:5px" src="https://github.com/AlenToma/NovelManager-public/blob/main/Screenshots/Screenshot_20210130-052041_NovelManager.jpg?raw=true" width="150">
-<img style="margin-left:5px" src="https://github.com/AlenToma/NovelManager-public/blob/main/Screenshots/Screenshot_1_20210130-052105_NovelManager.jpg?raw=true" width="150">
-<img style="margin-left:5px" src="https://github.com/AlenToma/NovelManager-public/blob/main/Screenshots/Screenshot_20210210-110720_NovelManager.jpg?raw=true" width="150">
+<img style="margin-left:5px" src="https://github.com/AlenToma/NovelManager-public/blob/main/Screenshots/Screenshot_20210221-201253_NovelManager.jpg" width="150">
+<img style="margin-left:5px" src="https://github.com/AlenToma/NovelManager-public/blob/main/Screenshots/Screenshot_20210221-201315_NovelManager.jpg" width="150">
+<img style="margin-left:5px" src="https://github.com/AlenToma/NovelManager-public/blob/main/Screenshots/Screenshot_20210221-201354_NovelManager.jpg" width="150">
+<img style="margin-left:5px" src="https://github.com/AlenToma/NovelManager-public/blob/main/Screenshots/Screenshot_20210221-201359_NovelManager.jpg" width="150">
+<img style="margin-left:5px" src="https://github.com/AlenToma/NovelManager-public/blob/main/Screenshots/Screenshot_20210221-201414_NovelManager.jpg" width="150">
+<img style="margin-left:5px" src="https://github.com/AlenToma/NovelManager-public/blob/main/Screenshots/Screenshot_20210221-201431_NovelManager.jpg" width="150">
+<img style="margin-left:5px" src="https://github.com/AlenToma/NovelManager-public/blob/main/Screenshots/Screenshot_20210221-201504_NovelManager.jpg" width="150">
+<img style="margin-left:5px" src="https://github.com/AlenToma/NovelManager-public/blob/main/Screenshots/Screenshot_20210221-201836_NovelManager.jpg" width="150">
  <div>
 
 
