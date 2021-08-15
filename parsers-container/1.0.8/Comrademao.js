@@ -71,7 +71,7 @@ async function search(filter, page) {
     var sortTypeUri = "https://comrademao.com/mtype/{s}/page/{p}/"
     var sortTypeUrl = sortTypeUri.replace("{s}", filter.sortType).replace("{p}", page.toString());
 
-    var url = filter.sortType && filter.sortType != '' ? sortTypeUrl : parser.searchUrl.replace('{q}', filter.title ?? '').replace("{p}", page.toString());
+    var url = filter.sortType && filter.sortType != '' ? sortTypeUrl : parser.searchUrl.replace('{q}', filter.title).replace("{p}", page.toString());
     if (filter.genres.length)
         url = `genre/${filter.genres[0]}/page/${page}`.uri(parser.url);
     else
@@ -82,7 +82,7 @@ async function search(filter, page) {
     var items = container.querySelector(".mybox") == undefined ? Array.from(container.querySelectorAll("section .columns")) : Array.from(container.querySelectorAll(".mybox li"));
 
     var result = [];
-    items?.forEach(x => {
+    items.forEach(x => {
         var a = container.querySelector(".mybox") ? x.querySelector("h3 a") : Array.from(x.querySelectorAll("a")).last()
         result.push(new LightItem(parser.uurl(parser.attr("src", x.querySelector("img")),
             parser.text(a, false), "",
@@ -114,7 +114,7 @@ async function getChapters(url) {
         chapters = chapters.concat(newChaps);
     }
     return chapters;
-    
+
 }
 
 
@@ -162,7 +162,7 @@ async function latest(page) {
     var result = [];
     items.forEach(x => {
         result.push(new LightItem(async () => (await getNovel(x.getAttribute("href"), true)).image,
-            parser.text(x, false) ?? "", "", parser.uurl(parser.attr("href", x)), parser.name));
+            parser.text(x, false), "", parser.uurl(parser.attr("href", x)), parser.name));
     });
 
     return result;
