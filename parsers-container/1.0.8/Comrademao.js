@@ -67,7 +67,31 @@ function parserDetali() {
 }
 
 
+async function search(filter, page) {
+    var sortTypeUri = "https://comrademao.com/mtype/{s}/page/{p}/"
+    var sortTypeUrl = sortTypeUri.replace("{s}", filter.sortType).replace("{p}", page.toString());
 
+    var url = filter.sortType && filter.sortType != "" ? sortTypeUrl : parser.searchUrl.replace('{q}', filter.title).replace("{p}", page.toString());
+    if (filter.genres.length)
+        url = "genre/" + filter.genres[0] + "/page/${page}".uri(parser.url);
+    else
+        if (filter.active && (!filter.sortType || filter.sortType == ""))
+            url = "status/" + filter.active + "/page/${page}".uri(parser.url);
+
+    var container = await HttpClient.getHtml(url);
+    var items = container.querySelector(".mybox") == undefined ? Array.from(container.querySelectorAll("section .columns")) : Array.from(container.querySelectorAll(".mybox li"));
+
+    var result = [];
+    items.forEach(x => {
+        var a = container.querySelector(".mybox") ? x.querySelector("h3 a") : Array.from(x.querySelectorAll("a")).last()
+        result.push(new LightItem(parser.uurl(parser.attr("src", x.querySelector("img"))),
+            parser.text(a, false), "",
+            parser.attr("href", a), parser.name));
+    });
+
+
+    return result;
+}
 
 async function getChapters(url) {
     var chapters = []
@@ -101,7 +125,7 @@ async function getNovel(novelUrl, basicInfo) {
     if (!basicInfo) {
         try {
             var nodes = Array.from(container.querySelectorAll("#NovelInfo > p"));
-            
+
             novelReviews.genres = nodes.findAt(1) ? Array.from(nodes.findAt(1).querySelectorAll("a")).map(x => x.innerHTML.htmlText(false)) : "";
             novelReviews.author = nodes.findAt(2) ? parser.text(nodes.findAt(2).querySelector("a"), false) : ""
             novelReviews.completed = (nodes.last() ? parser.text(nodes.last().querySelector("a"), false) : "") === "Complete" ? "Status:Completed" : "Status:Ongoing";
