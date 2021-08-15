@@ -1,5 +1,5 @@
 {
-    getChapters: function(novelUrl){
+    getChapters: function getChapters(novelUrl){
         alert(novelUrl)
     }
 }
