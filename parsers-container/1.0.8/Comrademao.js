@@ -3,10 +3,11 @@ function parserDetali() {
     item.defaultFiter = new Filter();
     item.sections = [
         new Section("latest", "Latest Update", "Latest", true),
-        new Section("romance", "Romance", "Search", false, new Filter([8])),
-        new Section("action", "Action", "Search", false, new Filter([1])),
-        new Section("mystery", "Mystery", "Search", false, new Filter([14])),
-    ]
+        new Section("completed", "Completed", "Search", false, new Filter(undefined, undefined, undefined, "complete")),
+        new Section("chinese", "Chinese", "Search", false, new Filter(undefined, "chinese")),
+        new Section("japanese", "Japanese", "Search", false, new Filter(undefined, "japanese")),
+        new Section("korean", "Korean", "Search", false, new Filter(undefined, "korean"))
+    ];
     item.detaliItemType = DetaliItemType.Novel;
     item.id = "1.comrademao";
     item.name = 'Comrademao';
@@ -112,11 +113,9 @@ async function getChapters(url) {
             break;
         chapters = chapters.concat(newChaps);
     }
-
     return chapters;
-
+    
 }
-
 
 
 async function getNovel(novelUrl, basicInfo) {
