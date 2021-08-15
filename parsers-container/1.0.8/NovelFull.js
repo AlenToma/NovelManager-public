@@ -68,6 +68,8 @@ function parserDetali() {
             new labelValue('Most Popular', 'most-popular'),
         ],
     };
+
+    return item;
 }
 
 async function search(filter, page) {
