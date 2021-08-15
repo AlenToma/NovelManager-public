@@ -8,6 +8,7 @@ function parserDetali() {
         new Section("action", "Action", "Search", false, new Filter([1])),
         new Section("mystery", "Mystery", "Search", false, new Filter([14])),
     ]
+    item.detaliItemType = DetaliItemType.Novel;
     item.id = "1.allnovel";
     item.parserLanguage = "en";
     item.name = 'AllNovel';
