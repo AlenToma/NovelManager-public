@@ -161,9 +161,7 @@ async function latest(page) {
 
     var result = [];
     items.forEach(x => {
-        result.push(new LightItem(async function () {
-            return (await getNovel(x.getAttribute("href"), true)).image
-        },
+        result.push(new LightItem( "ParserImageHandler?url="+x.getAttribute("href"),
             parser.text(x, false), "", parser.uurl(parser.attr("href", x)), parser.name));
     });
 
