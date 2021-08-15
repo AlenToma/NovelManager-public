@@ -79,8 +79,7 @@ async function search(filter, page) {
             : filter.sortType && filter.sortType != ''
                 ? sortTypeUrl.replace("{s}", filter.sortType)
                 : undefined;
-    var query =
-        q ??
+    var query = q ? q :
         parser.searchUrl
             .replace('{q}', filter.title)
             .replace('{p}', page.toString());
