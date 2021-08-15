@@ -84,9 +84,9 @@ async function search(filter, page) {
     var result = [];
     items.forEach(x => {
         var a = container.querySelector(".mybox") ? x.querySelector("h3 a") : Array.from(x.querySelectorAll("a")).last()
-        result.push(new LightItem(parser.uurl(parser.attr("src", x.querySelector("img")),
+        result.push(new LightItem(parser.uurl(parser.attr("src", x.querySelector("img"))),
             parser.text(a, false), "",
-            parser.attr("href", a), parser.name);
+            parser.attr("href", a), parser.name));
     });
 
 
