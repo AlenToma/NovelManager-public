@@ -104,7 +104,7 @@ async function getGenres(filter, page) {
 
     if (filter.genres.length > 0)
         url = url + "&categories=" + filter.genres.join("%2C");
-    var container = await httpClient.getHtml(url);
+    var container = await HttpClient.getHtml(url);
     var items = Array.from(container.querySelectorAll(".novel-item"));
     var result = [];
     items.forEach(x => {
