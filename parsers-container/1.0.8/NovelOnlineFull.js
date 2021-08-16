@@ -100,9 +100,9 @@ async function search(filter, page) {
 
     var container = parser.jq(await HttpClient.getHtml(url));
     var result = [];
-    container.find(".update_item").forEach(x => {
+    container.find(".update_item, .itemupdate").forEach(x => {
         result.push(new LightItem(x.select("img").attr("src").url(),
-            x.select("img").attr("title").text(false).url(),
+            x.select("img").attr("title").hasValue() ? x.select("img").attr("title").text(false) : x.select("img").attr("alt").text(false),
             "",
             x.select("a").attr("href").url(),
             parser.name));
