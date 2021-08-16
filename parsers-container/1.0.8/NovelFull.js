@@ -104,8 +104,7 @@ async function search(filter, page) {
 
 async function getChapters(novelUrl, htmlContainer) {
     var chapters = []
-    var url = 'https://novelfull.com/ajax-chapter-option?novelId={id}'.chaptersUrl.replace(
-        '{id}',
+    var url = "https://novelfull.com/ajax-chapter-option?novelId={id}".replace("{id}",
         parser.attr("data-novel-id", htmlContainer.querySelector('#rating')) != "" ?
             parser.attr("data-novel-id", htmlContainer.querySelector('#rating')) :
             parser.attr("data-novel-id", htmlContainer.querySelector("[data-novel-id]"))
