@@ -2,12 +2,7 @@
 function parserDetali() {
     var item = {};
     item.defaultFiter = new Filter();
-    item.sections = [
-        new Section("latest", "Latest Update", "Latest", true),
-        new Section("romance", "Romance", "Search", false, new Filter([8])),
-        new Section("action", "Action", "Search", false, new Filter([1])),
-        new Section("mystery", "Mystery", "Search", false, new Filter([14])),
-    ]
+
     item.detaliItemType = DetaliItemType.Novel;
     item.id = "1.allnovel";
     item.parserLanguage = "en";
@@ -37,6 +32,14 @@ function parserDetali() {
             new labelValue("Western", "western.html?page={p}")
         ]
     }
+
+    item.sections = [
+        new Section("latest", "Latest Update", "Latest", true),
+        new Section("romance", "Romance", "Search", false, new Filter([item.parserSearchSettings.genres.values[0].value])),
+        new Section("action", "Action", "Search", false, new Filter([item.parserSearchSettings.genres.values[1].value])),
+        new Section("mystery", "Mystery", "Search", false, new Filter([[item.parserSearchSettings.genres.values[2].value]])),
+        new Section("mystery", "Mystery", "Search", false, new Filter([[item.parserSearchSettings.genres.values[4].value]])),
+    ]
     return item;
 }
 
