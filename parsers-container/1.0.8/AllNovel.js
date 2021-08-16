@@ -45,7 +45,6 @@ function parserDetali() {
 
 
 async function search(filter, page) {
-
     if (!filter.title)
         filter.title = "";
     if (filter.genres.length <= 0 && filter.title == "")
@@ -62,7 +61,6 @@ async function search(filter, page) {
     });
 
     return result;
-
 }
 
 async function getNovel(novelUrl) {

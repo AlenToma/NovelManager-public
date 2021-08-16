@@ -18,7 +18,7 @@ function parserDetali() {
     item.searchPagination = true;
     item.icon = 'https://www.google.com/s2/favicons?domain=https://comrademao.com';
     item.parserSearchSettings = new ParserSearchSettings();
-    item.parserLanguage = "en";
+    item.parserLanguage = "default";
     item.parserSearchSettings.genres =
     {
         multiSelection: false,
