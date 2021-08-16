@@ -192,7 +192,7 @@ async function getNovel(novelUrl) {
     novelReviews.author = info.select(".author a").text(false);
     novelReviews.uvotes = "Rating:" + container.select(".rating-star strong").text() + "/5";
     novelReviews.description = container.select("#info .summary").innerHTML();
-    novelReviews.completed = infos.text(".header-stats .completed") === "Completed" ? "Status:Completed" : "Status:Ongoing";
+    novelReviews.completed = info.text(".header-stats .completed") === "Completed" ? "Status:Completed" : "Status:Ongoing";
 
     return new DetaliItem(
         getImage(container.select('.cover img')),
