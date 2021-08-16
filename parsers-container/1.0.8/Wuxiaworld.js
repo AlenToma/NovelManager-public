@@ -14,7 +14,7 @@ function parserDetali() {
     item.parserSearchSettings = new ParserSearchSettings();
     item.parserSearchSettings.multiSelection = true;
     item.parserSearchSettings.genres =
-    {
+    { 
         multiSelection: true,
         values: [
             new labelValue('Action'),
