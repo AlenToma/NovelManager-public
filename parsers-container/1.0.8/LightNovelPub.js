@@ -147,7 +147,6 @@ async function search(filter, page) {
 async function getChapters(novelUrl) {
     var page = 1;
     var result = [];
-
     while (page > 0) {
         var url = novelUrl + "/page-" + page;
         var items = parser.jq(await HttpClient.getHtml(url)).find(".chapter-list a");
@@ -170,7 +169,7 @@ async function getChapters(novelUrl) {
         resultA.forEach((x) => {
             result.push(x);
         });
-
+        await parser.delay(100);
         page++;
     }
     return result;
