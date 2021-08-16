@@ -61,7 +61,7 @@ async function search(filter, page) {
         return await getGenre(filter, page);
 
     var result = [];
-    var data = await httpClient.postForm(parser.searchUrl, { searchText: filter.title, storyType: 1, pageNo: page });
+    var data = await HttpClient.postForm(parser.searchUrl, { searchText: filter.title, storyType: 1, pageNo: page });
     if (data && data.result && data.result.storyList) {
         data.result.storyList.forEach(item => {
             result.push(new LightItem(async () => {
