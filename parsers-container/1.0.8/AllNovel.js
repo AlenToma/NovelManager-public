@@ -57,7 +57,7 @@ async function search(filter, page) {
             x.select("img").attr("src").url(),
             x.select(".title-home-novel").text(),
             "",
-            x.attr("href").text(),
+            x.attr("href").url(),
             parser.name));
     });
 
@@ -72,7 +72,7 @@ async function getNovel(novelUrl) {
     var info = container.select(".list-info");
     novelReviews.genres = info.findAt(1).find("a").textArray();
     novelReviews.author = info.findAt(0).select("a").text(false);
-    novelReviews.uvotes = info.findAt(2).select("span").hasValue() ? info.findAt(2).select("span").text(false) + " Views" : "";
+    novelReviews.uvotes = info.findAt(2).select("span").hasElement() ? info.findAt(2).select("span").text(false) + " Views" : "";
     return new DetaliItem(
         container.select(".row img").attr("src").url(),
         container.select(".detail-novel h1").text(false),
