@@ -159,9 +159,9 @@ async function getChapters(novelUrl) {
 
         var resultA = items.map((x) => {
             return new Chapter(x.attr("title").text(), x.attr("href").url());
-        }, []);
+        });
 
-        if (parser.validateChapters(resultA,result) == false) {
+        if (parser.validateChapters(resultA, result) == false) {
             page = 0;
             break;
         }
