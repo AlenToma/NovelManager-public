@@ -159,7 +159,7 @@ async function latest(page) {
         if (parser.attr("src", x.querySelector('img')) != "")
             result.push(
                 new LightItem(
-                    parser.imageManagerIdentifier +"?url="+parser.uurl(parser.attr("href", x.querySelector('.truyen-title a'))) + "&selector=.book img&attr=src",
+                    async () => { return (await getNovel(parser.uurl(parser.attr("href", x.querySelector('.truyen-title a'))), true)).image },
                     parser.text(x.querySelector('.truyen-title a'), false),
                     '',
                     parser.uurl(parser.attr("href", x.querySelector('.truyen-title a'))), parser.name
