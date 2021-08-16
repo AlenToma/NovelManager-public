@@ -141,7 +141,7 @@ async function getNovel(novelUrl) {
         item.completed = parser.text(tbInfo[1], false).replace(/\r?\n|\r/g, " ");
     var chapters = Array.from(container.querySelectorAll(".row-content-chapter a")).map(x => new Chapter(x.innerHTML, parser.uurl(x.getAttribute("href"))));
     return new DetaliItem(
-        parser.uurl(parser.attr("src", x.querySelector('.info-image img'))),
+        parser.uurl(parser.attr("src", container.querySelector('.info-image img'))),
         parser.text(container.querySelector('.story-info-right h1'), false),
         item.description,
         novelUrl,
@@ -163,7 +163,7 @@ async function latest(page) {
     var container = await HttpClient.getHtml(url);
     var result = [];
     var data = container.querySelectorAll('.content-genres-item');
-    data.forEach((x) => {
+    data.forEach(x => {
         if (parser.attr("src", x.querySelector('.genres-item-img img')) != "")
             result.push(
                 new LightItem(
