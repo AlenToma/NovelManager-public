@@ -84,9 +84,9 @@ function parserDetali() {
     };
 
     item.defaultFiter = new Filter();
-    item.defaultFiter.language = item.parserSearchSettings.languages?.values[0].value;
-    item.defaultFiter.sortType = item.parserSearchSettings.sortTypes?.values[0].value;
-    item.defaultFiter.active = item.parserSearchSettings.statuses?.values[0].value;
+    item.defaultFiter.language = item.parserSearchSettings.languages.values[0].value;
+    item.defaultFiter.sortType = item.parserSearchSettings.sortTypes.values[0].value;
+    item.defaultFiter.active = item.parserSearchSettings.statuses.values[0].value;
 
     item.sections = [
         new Section("latest", "Latest Update", "Latest", true),
