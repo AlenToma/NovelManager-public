@@ -150,13 +150,14 @@ async function getChapters(novelUrl) {
 
     while (page > 0) {
         var url = novelUrl + "/page-" + page;
-        var container = parser.jq(await HttpClient.getHtml(url));
-        if (!container.find(".chapter-list a").hasElements()) {
+        var items = parser.jq(await HttpClient.getHtml(url)).find(".chapter-list a");
+        var
+        if (!items.hasElements()) {
             page = 0;
             break;
         }
 
-        var resultA = container.find(".chapter-list a").map((x) => {
+        var resultA = items.map((x) => {
             var ch = new Chapter(x.attr("title").text(), x.attr("href").url());
             if (result.find((a) => a.chapterUrl == ch.chapterUrl && a.name == ch.name) === undefined)
                 return ch;
