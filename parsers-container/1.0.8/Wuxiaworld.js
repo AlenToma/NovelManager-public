@@ -87,9 +87,9 @@ function parserDetali() {
 
     item.sections = [
         new Section("latest", "Latest Update", "Latest", true),
-        new Section("new", "New Novel", "Search", false, HttpClient.cloneItem(item.defaultFilter, { sortType: "New" })),
-        new Section("popular", "Popular Novel", "Search", false, HttpClient.cloneItem(item.defaultFilter, { sortType: "Popular" })),
-        new Section("completed", "Completed Novel", "Search", false, HttpClient.cloneItem(item.defaultFilter, { active: false }))
+        new Section("new", "New Novel", "Search", false, HttpClient.cloneItem(item.defaultFiter, { sortType: "New" })),
+        new Section("popular", "Popular Novel", "Search", false, HttpClient.cloneItem(item.defaultFiter, { sortType: "Popular" })),
+        new Section("completed", "Completed Novel", "Search", false, HttpClient.cloneItem(item.defaultFiter, { active: false }))
     ]
 
     return item;
