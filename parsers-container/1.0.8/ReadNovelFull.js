@@ -17,6 +17,7 @@ function parserDetali() {
     item.chaptersUrl = 'https://readnovelfull.com/ajax/chapter-option?novelId={id}&currentChapterId=1';
     item.panination = true;
     item.searchPagination = true;
+    item.detaliItemType = DetaliItemType.Novel;
     item.icon = 'https://readnovelfull.com/img/favicon.ico';
 
     item.parserSearchSettings = new ParserSearchSettings();
