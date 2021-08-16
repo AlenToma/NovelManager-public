@@ -102,7 +102,7 @@ async function getChapters(url) {
     while (true) {
         page++;
         var pUrl = (`/page/${page}/`).uri(url);
-        var container = parser.jq(await HttpClient.getHtml(pUrl)).select("tbody tr th a");
+        var container = parser.jq(await HttpClient.getHtml(pUrl)).find("tbody tr th a");
         if (!container.hasElements()) {
             break;
         }
@@ -125,7 +125,7 @@ async function getNovel(novelUrl, basicInfo) {
     var novelReviews = new NovelReviews();
     if (!basicInfo) {
         try {
-            var node = container.select("#NovelInfo > p");
+            var node = container.find("#NovelInfo > p");
 
             novelReviews.genres = node.findAt(1).find("a").map(x => x.text());
             novelReviews.author = node.findAt(2).select("a").text();
