@@ -155,21 +155,16 @@ async function getChapters(novelUrl) {
             break;
         }
 
-        var resultA = items.map((x) => {
-            var ch = new Chapter(x.attr("title").text(), x.attr("href").url());
-            if (result.find((a) => a.chapterUrl == ch.chapterUrl && a.name == ch.name) === undefined)
-                return ch;
-            return undefined;
-        }, [])
 
-        if (resultA.length <= 0) {
+
+        var resultA = items.map((x) => {
+            return new Chapter(x.attr("title").text(), x.attr("href").url());
+        }, []);
+
+        if (parser.validateChapters(resultA,result) == false) {
             page = 0;
             break;
         }
-        resultA.forEach((x) => {
-            result.push(x);
-        });
-        await parser.delay(1);
         page++;
     }
     return result;
