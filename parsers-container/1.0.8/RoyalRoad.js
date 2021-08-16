@@ -131,7 +131,7 @@ async function search(filter, page) {
         result.push(new LightItem(x.select("img").attr("src").url(),
             x.select(".fiction-title").text(),
             "",
-            x.querySelector(".fiction-title a").attr("href").url(),
+            x.select(".fiction-title a").attr("href").url(),
             parser.name));
     });
 

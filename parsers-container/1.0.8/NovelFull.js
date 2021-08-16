@@ -88,7 +88,7 @@ async function search(filter, page) {
     var container = parser.jq(await HttpClient.getHtml(query));
     var result = []
     container.find('.list-truyen .row').forEach((x) => {
-        if (parser.attr("src", x.querySelector('img')) !== '')
+        if (x.select('img').attr("src").hasValue())
             result.push(
                 new LightItem(async () => { return (await getNovel(x.select('.truyen-title a').attr("href").url(), true)).image },
                     x.select('.truyen-title a').text(false),
@@ -104,10 +104,9 @@ async function search(filter, page) {
 async function getChapters(novelUrl, htmlContainer) {
     var chapters = []
     var url = "https://novelfull.com/ajax-chapter-option?novelId={id}".replace("{id}",
-        parser.attr("data-novel-id", htmlContainer.querySelector('#rating')) != "" ?
-            parser.attr("data-novel-id", htmlContainer.querySelector('#rating')) :
-            parser.attr("data-novel-id", htmlContainer.querySelector("[data-novel-id]"))
-    );
+        htmlContainer.select("#rating").attr("data-novel-id").hasValue() ?
+            htmlContainer.select("#rating").attr("data-novel-id").text() :
+            htmlContainer.select("[data-novel-id]").attr("data-novel-id").text());
 
     var container = parser.jq(await HttpClient.getHtml(url));
 
