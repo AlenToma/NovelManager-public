@@ -121,13 +121,20 @@ async function getNovel(novelUrl) {
         );
     });
 
+    var novelReviews = new NovelReviews();
+
+    var node = container.select(".novel-body");
+
+    novelReviews.genres = container.find('.genres a').textArray();
+    novelReviews.author = node.findByText("Author").parent().find("dd").text(false);
+ 
     return new DetaliItem(
         container.select('.img-thumbnail').attr("src").url(),
         container.select('.novel-body h2').text(false),
         container.find('.novel-bottom >div').findAt(1).innerHTML(),
         novelUrl,
         chapters,
-        container.find('.genres a').textArray(),
+        novelReviews,
         parser.name,
     );
 }
