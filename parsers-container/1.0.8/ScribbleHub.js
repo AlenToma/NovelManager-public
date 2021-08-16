@@ -101,7 +101,7 @@ async function search(filter, page) {
             parser.text(x.querySelector(".search_title")),
             "",
             parser.uurl(parser.attr("href", x.querySelector(".search_title a"))),
-            this.name));
+            parser.name));
     });
     return result;
 }

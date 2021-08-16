@@ -1,15 +1,7 @@
 function parserDetali() {
     var item = {};
-    item.defaultFiter = new Filter();
-    item.defaultFiter.language = this.parserSearchSettings.languages?.values[0].value;
-    item.defaultFiter.sortType = this.parserSearchSettings.sortTypes?.values[0].value;
-    item.defaultFiter.active = this.parserSearchSettings.statuses?.values[0].value;
-    item.sections = [
-        new Section("latest", "Latest Update", "Latest", true),
-        new Section("new", "New Novel", "Search", false, HttpClient.cloneItem(this.defaultFilter(), { sortType: "New" })),
-        new Section("popular", "Popular Novel", "Search", false, HttpClient.cloneItem(this.defaultFilter(), { sortType: "Popular" })),
-        new Section("completed", "Completed Novel", "Search", false, HttpClient.cloneItem(this.defaultFilter(), { active: false }))
-    ]
+
+
 
     item.id = "1.wuxiaworld";
     item.detaliItemType = DetaliItemType.Novel;
@@ -91,6 +83,18 @@ function parserDetali() {
         ],
     };
 
+    item.defaultFiter = new Filter();
+    item.defaultFiter.language = item.parserSearchSettings.languages?.values[0].value;
+    item.defaultFiter.sortType = item.parserSearchSettings.sortTypes?.values[0].value;
+    item.defaultFiter.active = item.parserSearchSettings.statuses?.values[0].value;
+
+    item.sections = [
+        new Section("latest", "Latest Update", "Latest", true),
+        new Section("new", "New Novel", "Search", false, HttpClient.cloneItem(item.defaultFilter, { sortType: "New" })),
+        new Section("popular", "Popular Novel", "Search", false, HttpClient.cloneItem(item.defaultFilter, { sortType: "Popular" })),
+        new Section("completed", "Completed Novel", "Search", false, HttpClient.cloneItem(item.defaultFilter, { active: false }))
+    ]
+
     return item;
 }
 
@@ -140,7 +144,7 @@ async function getNovel(novelUrl) {
         novelUrl,
         chapters,
         Array.from(container.querySelectorAll('.genres a')).map(x => x.innerHTML.htmlText(false)),
-        this.name,
+        parser.name,
     );
 }
 
