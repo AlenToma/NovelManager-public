@@ -65,16 +65,15 @@ async function search(filter, page) {
     var query = parser.searchUrl
         .replace('{q}', filter.title)
         .replace('{p}', page.toString());
-    var container = await HttpClient.getHtml(query);
-    var data = container.querySelectorAll('.list-item');
+    var container = parser.jq(await HttpClient.getHtml(query));
     var result = [];
-    data.forEach(x => {
+    container.find('.list-item').forEach(x => {
         result.push(
             new LightItem(
-                parser.uurl(parser.attr("src", x.querySelector('img'))),
-                parser.attr("alt", x.querySelector('img')),
+                x.select('img').attr("src").url(),
+                x.select('img').attr("alt").text(false),
                 '',
-                parser.uurl(parser.attr("href", x.querySelector('.book-name'))),
+                x.select('.book-name').attr("href").url(),
                 parser.name
             ),
         );
@@ -83,26 +82,25 @@ async function search(filter, page) {
 }
 
 async function getNovel(novelUrl, ignoreChapters) {
-    var container = await HttpClient.getHtml(novelUrl);
+    var container = parser.jq(await HttpClient.getHtml(novelUrl));
     var chapters = [];
     var novelReviews = new NovelReviews();
     if (!ignoreChapters) {
-        var htmlChapters = container.querySelectorAll('.chapter-list a');
+        var htmlChapters = container.find('.chapter-list a');
         htmlChapters.forEach((x) => {
             chapters.push(
-                new Chapter(parser.text(x.querySelector('.chapter-name')), parser.uurl(parser.attr("href", x)),
-                ),
+                new Chapter(x.select('.chapter-name').text(false), x.attr("href").url())
             );
         });
     }
-    novelReviews.genres = Array.from(container.querySelectorAll(".base-info .book-catalog .txt")).map(x => x.innerHTML.htmlText(false));
-    novelReviews.author = parser.text(container.querySelector(".author .name"), false);
-    novelReviews.uvotes = parser.text(container.querySelector(".score"), false) + " / 10";
-    novelReviews.completed = parser.text(container.querySelector(".base-info .book-state .txt"), false) === "Completed" ? "Status:Completed" : "Status:Ongoing";
+    novelReviews.genres = container.find(".base-info .book-catalog .txt").map(x => x.text(false));
+    novelReviews.author = container.select(".author .name").text(false);
+    novelReviews.uvotes = container.select(".score").text(false) + " / 10";
+    novelReviews.completed = container.select(".base-info .book-state .txt").text(false) === "Completed" ? "Status:Completed" : "Status:Ongoing";
     return new DetaliItem(
-        parser.uurl(parser.attr("src", container.querySelector('.book-container img'))),
-        parser.text(container.querySelector('.book-info .book-name')),
-        parser.innerHTML(container.querySelector('.synopsis .content .desc')),
+        container.select('.book-container img').attr("src").url(),
+        container.select('.book-info .book-name').text(false),
+        container.select('.synopsis .content .desc').innerHTML(),
         novelUrl,
         chapters,
         novelReviews,
@@ -112,20 +110,16 @@ async function getNovel(novelUrl, ignoreChapters) {
 }
 
 async function getChapter(url) {
-    return parser.outerHTML(((await HttpClient.getHtml(url)).querySelector('.read-container .section-list')));
+    return parser.jq(await HttpClient.getHtml(url)).select('.read-container .section-list').outerHTML();
 }
 
 async function latest(page) {
-    var container = await HttpClient.getHtml(parser.latestUrl);
+    var container = parser.jq(await HttpClient.getHtml(parser.latestUrl));
     var result = [];
 
-    var data = container.querySelectorAll(
-        '.update-content',
-    );
-
-    data.forEach((x) => {
-        var u = parser.attr("href", x.querySelector('.item-title a'));
-        var title = parser.text(x.querySelector('.item-title a'), false);
+    container.find('.update-content').forEach((x) => {
+        var u = x.select('.item-title a').attr("href");
+        var title = x.select('.item-title a').text(false);
         if (u != "" && !result.find((x) => u.uri(parser.url) == x.novel || title == x.title))
             result.push(
                 new LightItem(

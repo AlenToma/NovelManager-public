@@ -96,17 +96,16 @@ async function search(filter, page) {
         url = ("&sts=" + filter.active).uri(url);
     if (filter.title && filter.title.trim().length > 0)
         url = ("&keyw=" + filter.title.replace(/[ ]/g, "_")).uri(url);
-    var container = await HttpClient.getHtml(url);
-    var data = container.querySelectorAll('.content-genres-item');
+    var container = parser.jq(await HttpClient.getHtml(url));
     var result = [];
-    data.forEach((x) => {
-        if (parser.attr("src", x.querySelector('.genres-item-img img')) !== "")
+    container.find('.content-genres-item').forEach((x) => {
+        if (x.select('.genres-item-img img').attr("src") !== "")
             result.push(
                 new LightItem(
-                    parser.uurl(parser.attr("src", x.querySelector('.genres-item-img img'))),
-                    parser.attr("title", x.querySelector('.genres-item-img')),
+                    x.select('.genres-item-img img').attr("src").url(),
+                    x.select('.genres-item-img').attr("title").text(),
                     '',
-                    parser.uurl(parser.attr("href", x.querySelector('.genres-item-img'))),
+                    x.select('.genres-item-img').attr("href").url(),
                     parser.name
                 ),
             );
@@ -118,31 +117,31 @@ async function search(filter, page) {
 
 
 async function getNovel(novelUrl) {
-    var container = await HttpClient.getHtml(novelUrl);
+    var container = parser.jq(await HttpClient.getHtml(novelUrl));
 
     var item = new NovelReviews();
-    var tbInfo = container.querySelectorAll(".variations-tableInfo tr")
-    if (tbInfo.length > 3)
-        item.genres = Array.from(tbInfo[3].querySelectorAll(".table-value a")).map(x => x.innerHTML.htmlText(false));
-    else if (tbInfo.length == 3)
-        item.genres = Array.from(tbInfo[2].querySelectorAll(".table-value a")).map(x => x.innerHTML.htmlText(false));
-    item.description = parser.text(container.querySelector(".panel-story-info-description"));
+    var tbInfo = container.find(".variations-tableInfo tr")
+    if (tbInfo.length() > 3)
+        item.genres = tbInfo.findAt(3).find(".table-value a").map(x => x.text(false));
+    else if (tbInfo.length() == 3)
+        item.genres = tbInfo.findAt(2).find(".table-value a").map(x => x.text(false));
+    item.description = container.select(".panel-story-info-description")
 
-    item.uvotes = parser.text(container.querySelector("em[typeof='v:Rating']")).replace(/\r?\n|\r/g, " ");
-    item.alternativeNames = tbInfo.length > 3 ? parser.text(tbInfo[0].querySelector("#editassociated")) : "";
-    if (tbInfo.length > 3)
-        item.author = tbInfo.length >= 1 ? parser.text(tbInfo[1].querySelector(".table-value"), false) : "";
-    else if (tbInfo.length > 0)
-        item.author = parser.text(tbInfo[0].querySelector(".table-value"), false);
+    item.uvotes = container.select("em[typeof='v:Rating']").text(false).replace(/\r?\n|\r/g, " ");
+    item.alternativeNames = tbInfo.length() > 3 ? tbInfo.findAt(0).select("#editassociated").text(false) : "";
+    if (tbInfo.length() > 3)
+        item.author = tbInfo.findAt(1).select(".table-value").text(false);
+    else if (tbInfo.length() > 0)
+        item.author = tbInfo.findAt(0).select(".table-value").text(false);
     item.lang = "";
-    if (tbInfo.length > 3)
-        item.completed = parser.text(tbInfo[2], false).replace(/\r?\n|\r/g, " ");
-    else if (tbInfo.length == 3)
-        item.completed = parser.text(tbInfo[1], false).replace(/\r?\n|\r/g, " ");
-    var chapters = Array.from(container.querySelectorAll(".row-content-chapter a")).map(x => new Chapter(x.innerHTML, parser.uurl(x.getAttribute("href"))));
+    if (tbInfo.length() > 3)
+        item.completed = tbInfo.findAt(2).text(false).replace(/\r?\n|\r/g, " ");
+    else if (tbInfo.length() == 3)
+        item.completed = tbInfo.findAt(1).text(false).replace(/\r?\n|\r/g, " ");
+    var chapters = container.find(".row-content-chapter a").map(x => new Chapter(x.text(false), x.attr("href").url()));
     return new DetaliItem(
-        parser.uurl(parser.attr("src", container.querySelector('.info-image img'))),
-        parser.text(container.querySelector('.story-info-right h1'), false),
+        container.select('.info-image img').attr("src").url(),
+        container.select('.story-info-right h1').text(false),
         item.description,
         novelUrl,
         chapters.reverse(),
@@ -153,24 +152,21 @@ async function getNovel(novelUrl) {
 }
 
 async function getChapter(url) {
-    var container = await HttpClient.getHtml(url);
-    var chps = Array.from(container.querySelectorAll('.container-chapter-reader img')).map(x => parser.uurl(x.getAttribute("src")));
-    return chps ? chps.filter(x => x && x != "") : [];
+    return parser.jq(await HttpClient.getHtml(url)).find(".container-chapter-reader img").map(x => x.attr("src").url()).filter(x => x && x != "");
 }
 
 async function latest(page) {
     var url = parser.latestUrl.replace('{p}', page.toString());
-    var container = await HttpClient.getHtml(url);
+    var container = parser.jq(await HttpClient.getHtml(url));
     var result = [];
-    var data = container.querySelectorAll('.content-genres-item');
-    data.forEach(x => {
-        if (parser.attr("src", x.querySelector('.genres-item-img img')) != "")
+    container.find('.content-genres-item').forEach(x => {
+        if (x.select('.genres-item-img img').attr("src").hasValue())
             result.push(
                 new LightItem(
-                    parser.uurl(parser.attr("src", x.querySelector('.genres-item-img img'))),
-                    parser.attr("title", x.querySelector('.genres-item-img')),
+                    x.select(".genres-item-img img").attr("src").text(),
+                    x.select(".genres-item-img").attr("title").text(false),
                     '',
-                    parser.uurl(parser.attr("href", x.querySelector('.genres-item-img'))),
+                    x.select('.genres-item-img').attr("href").url(),
                     parser.name
                 ),
             );

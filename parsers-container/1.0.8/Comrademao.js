@@ -78,15 +78,17 @@ async function search(filter, page) {
         if (filter.active && (!filter.sortType || filter.sortType == ""))
             url = "status/" + filter.active + "/page/${page}".uri(parser.url);
 
-    var container = await HttpClient.getHtml(url);
-    var items = container.querySelector(".mybox") == undefined ? Array.from(container.querySelectorAll("section .columns")) : Array.from(container.querySelectorAll(".mybox li"));
+    var container = parser.jq(await HttpClient.getHtml(url));
+    var mybox = container.select(".mybox").hasElement();
+    var item = !mybox ? container.find("section .columns") : container.find(".mybox li");
 
     var result = [];
-    items.forEach(x => {
-        var a = container.querySelector(".mybox") ? x.querySelector("h3 a") : Array.from(x.querySelectorAll("a")).last()
-        result.push(new LightItem(parser.uurl(parser.attr("src", x.querySelector("img"))),
-            parser.text(a, false), "",
-            parser.attr("href", a), parser.name));
+    item.forEach(x => {
+        var a = mybox ? x.select("h3 a") : x.find("a").last();
+        result.push(new LightItem(
+            x.select("img").attr("src").url(),
+            a.text(false), "",
+            a.attr("href").url(), parser.name));
     });
 
 
@@ -100,14 +102,13 @@ async function getChapters(url) {
     while (true) {
         page++;
         var pUrl = (`/page/${page}/`).uri(url);
-        var container = await HttpClient.getHtml(pUrl);
-        var chs = container.querySelectorAll("tbody tr th a");
-        if (!chs || chs.length <= 0) {
+        var container = parser.jq(await HttpClient.getHtml(pUrl)).select("tbody tr th a");
+        if (!container.hasElements()) {
             break;
         }
 
-        var newChaps = Array.from(chs).map(x => {
-            return new Chapter(x.innerHTML, parser.uurl(x.getAttribute("href")));
+        var newChaps = container.map(x => {
+            return new Chapter(x.innerHTML(), x.attr("href").url());
         }).filter(f => f.chapterUrl && f.chapterUrl.length > 0 && !chapters.find(x => x.chapterUrl == f.chapterUrl));
         if (newChaps.length <= 0)
             break;
@@ -119,17 +120,17 @@ async function getChapters(url) {
 
 
 async function getNovel(novelUrl, basicInfo) {
-    var container = await HttpClient.getHtml(novelUrl);
+    var container = parser.jq(await HttpClient.getHtml(novelUrl));
     var chapters = basicInfo === true ? [] : await getChapters(novelUrl);
     var novelReviews = new NovelReviews();
     if (!basicInfo) {
         try {
-            var nodes = Array.from(container.querySelectorAll("#NovelInfo > p"));
+            var node = container.select("#NovelInfo > p");
 
-            novelReviews.genres = nodes.findAt(1) ? Array.from(nodes.findAt(1).querySelectorAll("a")).map(x => x.innerHTML.htmlText(false)) : "";
-            novelReviews.author = nodes.findAt(2) ? parser.text(nodes.findAt(2).querySelector("a"), false) : ""
-            novelReviews.completed = (nodes.last() ? parser.text(nodes.last().querySelector("a"), false) : "") === "Complete" ? "Status:Completed" : "Status:Ongoing";
-            novelReviews.authorUrl = nodes.findAt(2) ? parser.attr("href", nodes.findAt(2).querySelector("a")) : ""
+            novelReviews.genres = node.findAt(1).find("a").map(x => x.innerHTML.htmlText(false));
+            novelReviews.author = node.findAt(2).select("a").text();
+            novelReviews.completed = node.last().select("a").text() === "Complete" ? "Status:Completed" : "Status:Ongoing";
+            novelReviews.authorUrl = nodes.findAt(2).select("a").attr("href").text();
 
         } catch (e) {
             console.log(e);
@@ -137,9 +138,9 @@ async function getNovel(novelUrl, basicInfo) {
 
     }
     return new DetaliItem(
-        parser.uurl(parser.attr("src", container.querySelector('#NovelInfo img'))),
-        parser.text(container.querySelector('title'), false).replace("Comrade Mao", "").replace("-", "").trim(),
-        parser.text(Array.from(container.querySelectorAll('#NovelInfo .columns .column')).last(), true),
+        container.select('#NovelInfo img').attr("src").url(),
+        container.select('title').text().replace("Comrade Mao", "").replace("-", "").trim(),
+        container.find('#NovelInfo .columns .column').last().innerHTML(),
         novelUrl,
         chapters.reverse(),
         novelReviews,
@@ -149,20 +150,16 @@ async function getNovel(novelUrl, basicInfo) {
 }
 
 async function getChapter(url) {
-    var container = await HttpClient.getHtml(url);
-    return parser.outerHTML(container.querySelector("#content"))
-
+    return parser.jq(await HttpClient.getHtml(url)).select("#content").outerHTML();
 }
 
 async function latest(page) {
     var url = parser.latestUrl.replace("{p}", page.toString());
-    var container = await HttpClient.getHtml(url);
-    var items = Array.from(container.querySelectorAll("tbody > tr > th:first-child > a"));
-
+    var container = parser.jq(await HttpClient.getHtml(url));
     var result = [];
-    items.forEach(x => {
-        result.push(new LightItem(async () => (await getNovel(x.getAttribute("href"), true)).image,
-            parser.text(x, false), "", parser.uurl(parser.attr("href", x)), parser.name));
+    container.find("tbody > tr > th:first-child > a").forEach(x => {
+        result.push(new LightItem(async () => (await getNovel(x.attr("href").url(), true)).image,
+            x.text(false), "", x.attr("href").url(), parser.name));
     });
 
     return result;

@@ -87,17 +87,17 @@ async function getChapters(bookId) {
 
 async function getNovel(novelUrl, ignorechapters) {
     novelUrl = parseInt(novelUrl).toString();
-    var container = await HttpClient.getHtml(novelUrl.toString().uri("https://www.tapread.com/book/detail/"));
+    var container = parser.jq(await HttpClient.getHtml(novelUrl.toString().uri("https://www.tapread.com/book/detail/")));
     var chapters = !ignorechapters ? await getChapters(novelUrl) : [];
     var novelReviews = new NovelReviews();
-    novelReviews.genres = Array.from(container.querySelectorAll(".base-info .book-catalog .txt")).map(x => x.innerHTML.htmlText(false));
-    novelReviews.author = parser.text(container.querySelector(".author .name"), false);
-    novelReviews.uvotes = parser.text(container.querySelector(".score"), false) + " / 5";
-    novelReviews.completed = parser.text(container.querySelector(".base-info .book-state .txt")) === "Completed" ? "Status:Completed" : "Status:Ongoing";
+    novelReviews.genres = container.find(".base-info .book-catalog .txt").textArray();
+    novelReviews.author = container.select(".author .name").text(false);
+    novelReviews.uvotes = container.select(".score").text() + " / 5";
+    novelReviews.completed = container.select(".base-info .book-state .txt").text(false) === "Completed" ? "Status:Completed" : "Status:Ongoing";
     return new DetaliItem(
-        parser.uurl(parser.attr("src", container.querySelector('.book-img img'))),
-        parser.text(container.querySelector('.book-name', false)),
-        parser.innerHTML(container.querySelector('.desc')),
+        container.select('.book-img img').attr("src").url(),
+        container.select('.book-name').text(false),
+        container.select('.desc').innerHTML(),
         novelUrl,
         chapters,
         novelReviews,

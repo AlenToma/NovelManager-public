@@ -98,14 +98,13 @@ async function search(filter, page) {
 
     var url = (!filter.title || filter.title == "") && filter.sortType && filter.sortType != '' ? sortTypeUrl : parser.searchUrl.replace('{q}', (filter.title).replace(/[ ]/, "_"));
 
-    var container = await HttpClient.getHtml(url);
-    var items = Array.from(container.querySelectorAll(".update_item"));
+    var container = parser.jq(await HttpClient.getHtml(url));
     var result = [];
-    items.forEach(x => {
-        result.push(new LightItem(parser.uurl(parser.attr("src", x.querySelector("img"))),
-            parser.attr("title", x.querySelector("img")),
+    container.find(".update_item").forEach(x => {
+        result.push(new LightItem(x.select("img").attr("src").url(),
+            x.select("img").attr("title").text(false).url(),
             "",
-            parser.uurl(parser.attr("src", x.querySelector("a"))),
+            x.select("a").attr("href").url(),
             parser.name));
     });
 
@@ -114,22 +113,22 @@ async function search(filter, page) {
 }
 
 async function getNovel(novelUrl) {
-    var container = await HttpClient.getHtml(novelUrl);
-    var chapters = Array.from(container.querySelectorAll(".chapter-list .row a")).map(x => new Chapter(x.innerHTML, parser.uurl(x.getAttribute("href"))));
+    var container = parser.jq(await HttpClient.getHtml(novelUrl));
+    var chapters = container.find(".chapter-list .row a").map(x => new Chapter(x.text(false), x.attr("href").url()));
     var novelReviews = new NovelReviews();
-    var infos = Array.from(container.querySelectorAll(".truyen_info_right li"));
+    var infos = container.find(".truyen_info_right li")
 
-    if (infos && infos.length >= 10) {
-        novelReviews.genres = Array.from(infos.findAt(2).querySelectorAll("a")).map(x => x.innerHTML.htmlText(false))
-        novelReviews.author = Array.from(infos.findAt(1).querySelectorAll("a")).map(x => x.innerHTML.htmlText(false)).join(", ")
-        novelReviews.uvotes = infos.findAt(6).innerHTML.htmlText(false);
-        novelReviews.description = parser.text(container.querySelector('#noidungm'), false);
-        novelReviews.completed = parser.text(infos.findAt(3).querySelector("a"), false) === "Completed" ? "Status:Completed" : "Status:Ongoing";
-    }
+
+    novelReviews.genres = infos.findAt(2).find("a").textArray();
+    novelReviews.author = infos.findAt(1).find("a").text();
+    novelReviews.uvotes = infos.findAt(6).text(false);
+    novelReviews.description = infos.select("#noidungm").text(false);
+    novelReviews.completed = infos.findAt(3).select("a").text(false) === "Completed" ? "Status:Completed" : "Status:Ongoing";
+
     return new DetaliItem(
-        parser.uurl(parser.attr("src", container.querySelector('.info_image img'))),
-        parser.text(container.querySelector('.truyen_info_right h1'), false),
-        parser.innerHTML(container.querySelector('#noidungm')),
+        container.select(".info_image img").attr("src").url(),
+        container.select('.truyen_info_right h1').text(false),
+        container.select('#noidungm').innerHTML(),
         novelUrl,
         chapters.reverse(),
         novelReviews,
@@ -139,20 +138,18 @@ async function getNovel(novelUrl) {
 }
 
 async function getChapter(url) {
-    var container = await HttpClient.getHtml(url);
-    return parser.outerHTML(container.querySelector(".vung_doc"));
+    return parser.jq(await HttpClient.getHtml(url)).select(".vung_doc").outerHTML();
 }
 
 async function latest(page) {
     var url = parser.latestUrl.replace("{p}", page.toString());
-    var container = await HttpClient.getHtml(url);
-    var items = Array.from(container.querySelectorAll(".update_item"));
+    var container = parser.jq(await HttpClient.getHtml(url));
     var result = [];
-    items.forEach(x => {
-        result.push(new LightItem(parser.uurl(parser.attr("src", x.querySelector("img"))),
-            parser.attr("title", x.querySelector("img")),
+    container.find(".update_item").forEach(x => {
+        result.push(new LightItem(x.select("img").attr("src").url(),
+            x.select("img").attr("title").text(false),
             "",
-            parser.uurl(parser.attr("href", x.querySelector("a"))),
+            x.select("a").attr("href").url(),
             parser.name));
     });
 

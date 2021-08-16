@@ -92,15 +92,14 @@ async function search(filter, page) {
 
     var url = filter.title && filter.title.length > 0 ? parser.searchUrl.replace("{q}", filter.title) : sortTypeUrl;
 
-    var container = await HttpClient.getHtml(url);
-    var items = Array.from(container.querySelectorAll(".search_main_box"));
+    var container = parser.jq(await HttpClient.getHtml(url));
     var result = [];
-    items.forEach(x => {
+    container.find(".search_main_box").forEach(x => {
         result.push(new LightItem(
-            parser.uurl(parser.attr("src", x.querySelector("img"))),
-            parser.text(x.querySelector(".search_title")),
+            x.select("img").attr("src").url(),
+            x.select(".search_title").text(false),
             "",
-            parser.uurl(parser.attr("href", x.querySelector(".search_title a"))),
+            x.select(".search_title a").attr("href").url(),
             parser.name));
     });
     return result;
@@ -108,29 +107,27 @@ async function search(filter, page) {
 
 
 async function getChapters(id) {
-    console.log("strSID:" + id);
+    console.log("strSID:" + id)
     var html = await HttpClient.postForm("https://www.scribblehub.com/wp-admin/admin-ajax.php", { action: "wi_gettocchp", strSID: parseInt(id), strmypostid: 0, strFic: "yes" });
-    var container = HttpClient.parseHtml(html);
-
-    return container.querySelectorAll("a").map(x => new Chapter(x.innerHTML, parser.uurl(x.getAttribute("href"))));
+    return parser.jq(HttpClient.parseHtml(html)).find("a").map(x => new Chapter(x.text(false), x.attr("href").url()));
 }
 
 async function getNovel(novelUrl) {
-    var container = await HttpClient.getHtml(novelUrl);
-    var id = container.querySelector("#mypostid") ? container.querySelector("#mypostid").nodeValue : novelUrl.split("/")[novelUrl.split("/").indexOf("series") + 1];
+    var container = parser.jq(await HttpClient.getHtml(novelUrl));
+    var id = container.select("#mypostid").nodeValue() ? container.select("#mypostid").nodeValue() : novelUrl.split("/")[novelUrl.split("/").indexOf("series") + 1];
     var chapters = await getChapters(id);
     var reg = new RegExp(/"(ratingValue)":"((\\"|[^"])*)"/, "i")
-    var res = reg.exec(container.innerHTML);
+    var res = reg.exec(container.innerHTML());
     var rate = eval((res && res.length > 0 ? res.findAt(0).split(":").last() : "1"));
     var novelReviews = new NovelReviews();
-    novelReviews.author = parser.text(container.querySelector("[property='author'] .auth_name_fic"), false);
-    novelReviews.genres = Array.from(container.querySelectorAll(".wi_fic_genre a")).map(x => x.innerHTML.htmlText(false));
+    novelReviews.author = container.select("[property='author'] .auth_name_fic").text(false);
+    novelReviews.genres = container.find(".wi_fic_genre a").textArray();
     novelReviews.uvotes = "Rating:" + parseInt(rate ? rate : "1").toFixed(0) + "/5";
-    novelReviews.completed = parser.text(container.querySelector(".widget_fic_similar"), false).indexOf("Completed") != -1 ? "Status:Completed" : "Status:Ongoing";
+    novelReviews.completed = container.select(".widget_fic_similar").text(false).indexOf("Completed") != -1 ? "Status:Completed" : "Status:Ongoing";
     return new DetaliItem(
-        parser.uurl(parser.attr("src", container.querySelector(".novel-cover img"))),
-        parser.text(container.querySelector('.fic_title')),
-        parser.innerHTML(container.querySelector('.wi_fic_desc')),
+        container.select(".novel-cover img").attr("src").url(),
+        container.select('.fic_title').text(false),
+        container.select('.wi_fic_desc').innerHTML(),
         novelUrl,
         chapters.reverse(),
         novelReviews,
@@ -140,21 +137,19 @@ async function getNovel(novelUrl) {
 }
 
 async function getChapter(url) {
-    var container = await HttpClient.getHtml(url);
-    return parser.outerHTML(container.querySelector(".chp_raw"));
+    return parser.jq(await HttpClient.getHtml(url)).select(".chp_raw").outerHTML();
 }
 
 async function latest(page) {
     var url = parser.latestUrl.replace("{p}", page.toString());
-    var container = await HttpClient.getHtml(url);
-    var items = Array.from(container.querySelectorAll("#main_releases td"));
+    var container = parser.jq(await HttpClient.getHtml(url));
     var result = [];
-    items.forEach(x => {
+    container.select("#main_releases td").forEach(x => {
         result.push(new LightItem(
-            parser.uurl(parser.attr("src", x.querySelector("img"))),
-            parser.text(x.querySelector(".fp_title")),
+            x.select("img").attr("src").url(),
+            x.select(".fp_title").text(false),
             "",
-            parser.uurl(parser.attr("href", x.querySelector(".fp_title"))),
+            x.select(".fp_title").attr("href").url(),
             parser.name));
     });
     return result;

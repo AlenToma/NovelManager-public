@@ -110,42 +110,38 @@ async function search(filter, page) {
 }
 
 async function getNovel(novelUrl) {
-    var container = await HttpClient.getHtml(novelUrl);
+    var container = parser.jq(await HttpClient.getHtml(novelUrl));
     var chapters = [];
-    var htmlChapters = container.querySelectorAll(
-        '.novel-content .chapter-item a',
-    );
-
-    htmlChapters.forEach((x) => {
+    container.find('.novel-content .chapter-item a').forEach((x) => {
         chapters.push(
             new Chapter(
-                parser.text(x),
-                parser.uurl(parser.attr("href", x))
+                x.text(false),
+                a.attr("href").url()
             ),
         );
     });
 
     return new DetaliItem(
-        parser.uurl(parser.attr("src", container.querySelector('.img-thumbnail'))),
-        parser.text(container.querySelector('.novel-body h2'), false),
-        parser.innerHTML(Array.from(container.querySelectorAll('.novel-bottom >div')).findAt(1)),
+        container.select('.img-thumbnail').attr("src").url(),
+        container.select('.novel-body h2').text(false),
+        container.find('.novel-bottom >div').findAt(1).innerHTML(),
         novelUrl,
         chapters,
-        Array.from(container.querySelectorAll('.genres a')).map(x => x.innerHTML.htmlText(false)),
+        container.find('.genres a').textArray(),
         parser.name,
     );
 }
 
 async function getChapter(url) {
-    return parser.outerHTML((await HttpClient.getHtml(url)).querySelector('#chapter-content'));
+    return parser.jq(await HttpClient.getHtml(url)).select('#chapter-content').outerHTML();
 }
 
 async function latest(page) {
-    var container = await HttpClient.getHtml(parser.latestUrl);
-    var data = container.querySelectorAll('.section-content .title a');
-    return await Array.from(data).asyncForeachWithReturn(async (x) => {
+    var container = parser.jq(await HttpClient.getHtml(parser.latestUrl));
+    return container.find('.section-content .title a').map((x) => {
         return new LightItem(async () => {
-            return parser.uurl(parser.attr("src", (await HttpClient.getHtml(parser.uurl(parser.attr("href", x.getAttribute('href'))))).querySelector('.img-thumbnail')))
-        }, x.innerHTML, '', parser.uurl(parser.attr("href", x)), parser.name);
+            var elem = parser.jq(await HttpClient.getHtml(x.attr('href').url()))
+            return elem.select(".img-thumbnail").attr("src").url();
+        }, x.text(false), '', x.attr('href').url(), parser.name);
     });
 }

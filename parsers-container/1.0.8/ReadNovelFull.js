@@ -79,17 +79,16 @@ async function search(filter, page) {
     var q = filter.genres.length > 0 ? genreUrl.replace("{g}", filter.genres[0]) : filter.sortType && filter.sortType != '' ? sortTypeUrl.replace("{s}", filter.sortType) : undefined;
 
     var query = q ? q : parser.searchUrl.replace('{q}', filter.title).replace('{p}', page.toString());
-    var container = await HttpClient.getHtml(query);
-    var data = container.querySelectorAll('.list-novel .row');
+    var container = parser.jq(await HttpClient.getHtml(query));
     var result = [];
-    data.forEach((x) => {
-        if (parser.attr("src", x.querySelector('img')) != "")
+    container.find('.list-novel .row').forEach((x) => {
+        if (x.select('img').attr("src").hasValue())
             result.push(
                 new LightItem(
-                    parser.uurl(parser.attr("src", x.querySelector('img')).replace(/\d+x\d+/, "150x170")),
-                    parser.text(x.querySelector('.novel-title a'), false),
+                    x.select('img').attr("src").replace(/\d+x\d+/, "150x170"),
+                    x.select('.novel-title a').text(false),
                     '',
-                    parser.uurl(parser.attr("href", x.querySelector('.novel-title a')))
+                    x.select('.novel-title a').attr("href").url()
                     ,
                     parser.name
                 ),
@@ -101,39 +100,31 @@ async function search(filter, page) {
 
 async function getChapters(novelUrl, htmlContainer) {
     var chapters = [];
-    var url = parser.chaptersUrl.replace('{id}', (parser.attr('data-novel-id', htmlContainer.querySelector('#rating')) !== "" ?
-        parser.attr('data-novel-id', htmlContainer.querySelector('#rating')) :
-        parser.attr('data-novel-id', htmlContainer.querySelector('[data-novel-id]')))
-    );
+    var url = parser.chaptersUrl.replace('{id}', (htmlContainer.select('#rating').attr("data-novel-id").hasValue() ?
+        htmlContainer.select('#rating').attr("data-novel-id").hasValue() :
+        htmlContainer.select('[data-novel-id]').attr("data-novel-id").hasValue()));
 
-    var container = await HttpClient.getHtml(url);
-    var htmlChapters = container.querySelectorAll('option');
-    htmlChapters.forEach(x => {
-        var aUrl = parser.uurl(parser.attr("value", x));
-        var title = parser.text(x);
-        if (aUrl && aUrl !== '')
-            chapters.push(new Chapter(title, aUrl));
+    var container = parser.jq(await HttpClient.getHtml(url));
+    container.find('option').forEach(x => {
+        if (x.attr("value").hasValue())
+            chapters.push(new Chapter(x.text(false), x.attr("value").url()));
     });
     return chapters;
 }
 
 async function getNovel(novelUrl) {
-    var container = await HttpClient.getHtml(novelUrl);
+    var container = parser.jq(await HttpClient.getHtml(novelUrl));
     var chapters = await getChapters(novelUrl, container);
     var item = new NovelReviews();
-    var info = Array.from(container.querySelectorAll('.info li'));
-    if (info.find(x => x.innerHTML.toLowerCase().indexOf("genre") != -1))
-        item.genres = Array.from(info.find(x => x.innerHTML.toLowerCase().indexOf("genre") != -1).querySelectorAll("a")).map(x => x.innerHTML.htmlText(false));
-    if (info.find(x => x.innerHTML.toLowerCase().indexOf("author") != -1))
-        item.author = Array.from(info.find(x => x.innerHTML.toLowerCase().indexOf("author") != -1).querySelectorAll("a")).map(x => x.innerHTML.htmlText(false)).join(",");
-    if (info.find(x => x.innerHTML.toLowerCase().indexOf("status") != -1))
-        item.completed = info.find(x => x.innerHTML.toLowerCase().indexOf("status") != -1).innerHTML.htmlText(false);
-    if (info.find(x => x.innerHTML.toLowerCase().indexOf("alternative names") != -1))
-        item.alternativeNames = info.find(x => x.innerHTML.toLowerCase().indexOf("alternative names") != -1).innerHTML.htmlText(false);
+    var info = container.find('.info li');
+    item.genres = info.search(x => x.innerHTML().toLowerCase().indexOf("genre") != -1).find("a").textArray();
+    item.author = info.search(x => x.innerHTML().toLowerCase().indexOf("author") != -1).find("a").text(false)
+    item.completed = info.search(x => x.innerHTML().toLowerCase().indexOf("status") != -1).text(false);
+    item.alternativeNames = info.search(x => x.innerHTML().toLowerCase().indexOf("alternative names") != -1).text();
     return new DetaliItem(
-        parser.uurl(parser.attr("src", container.querySelector('.book img'))),
-        parser.text(container.querySelector('.title')),
-        parser.outerHTML(container.querySelector('.desc-text')),
+        container.select('.book img').attr("src").url(),
+        container.select('.title').text(false),
+        container.select('.desc-text').outerHTML(),
         novelUrl,
         chapters,
         item,
@@ -143,23 +134,21 @@ async function getNovel(novelUrl) {
 }
 
 async function getChapter(url) {
-    var container = await HttpClient.getHtml(url);
-    return parser.outerHTML(container.querySelector('#chr-content'));
+    return parser.jq(await HttpClient.getHtml(url)).select('#chr-content').outerHTML();
 }
 
 async function latest(page) {
     var url = parser.latestUrl.replace('{p}', page.toString());
-    var container = await HttpClient.getHtml(url);
+    var container = parser.jq(await HttpClient.getHtml(url));
     var result = [];
-    var data = container.querySelectorAll('.list-novel .row');
-    data.forEach((x) => {
-        if (parser.attr("src", x.querySelector('img')) !== "")
+    container.find('.list-novel .row').forEach((x) => {
+        if (x.select('img').attr("src").hasValue())
             result.push(
                 new LightItem(
-                    parser.uurl(parser.attr("src", x.querySelector('img')).replace(/\d+x\d+/, "150x170")),
-                    parser.text(x.querySelector('.novel-title a'), false),
+                    x.select('img').attr("src").url().replace(/\d+x\d+/, "150x170"),
+                    x.select('.novel-title a').text(),
                     '',
-                    parser.uurl(parser.attr("href", x.querySelector('.novel-title a')))
+                    x.select('.novel-title a').attr("href").url()
                     , parser.name
                 ),
             );
