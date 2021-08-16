@@ -96,7 +96,7 @@ async function search(filter, page) {
     var sortTypeUri = "https://novelonlinefull.com/novel_list?type={s}&category={g}&state=all&page={p}"
     var sortTypeUrl = sortTypeUri.replace("{s}", filter.sortType).replace("{p}", page.toString()).replace("{g}", filter.genres.length > 0 ? filter.genres[0] : "all");
 
-    var url = (!filter.title || filter.title == "") && filter.sortType && filter.sortType != '' ? sortTypeUrl : this.searchUrl.replace('{q}', (filter.title).replace(/[ ]/, "_"));
+    var url = (!filter.title || filter.title == "") && filter.sortType && filter.sortType != '' ? sortTypeUrl : parser.searchUrl.replace('{q}', (filter.title).replace(/[ ]/, "_"));
 
     var container = await HttpClient.getHtml(url);
     var items = Array.from(container.querySelectorAll(".update_item"));
