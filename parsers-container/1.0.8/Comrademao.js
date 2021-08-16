@@ -108,7 +108,7 @@ async function getChapters(url) {
         }
 
         var newChaps = container.map(x => {
-            return new Chapter(x.innerHTML(), x.attr("href").url());
+            return new Chapter(x.text(false), x.attr("href").url());
         }).filter(f => f.chapterUrl && f.chapterUrl.length > 0 && !chapters.find(x => x.chapterUrl == f.chapterUrl));
         if (newChaps.length <= 0)
             break;
