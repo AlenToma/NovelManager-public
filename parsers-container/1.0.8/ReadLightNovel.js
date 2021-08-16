@@ -72,7 +72,6 @@ async function search(filter, page) {
         result.push(
             new LightItem(
                 parser.uurl(parser.attr("src", x.querySelector('img'))),
-                '',
                 parser.attr("alt", x.querySelector('img')),
                 '',
                 parser.uurl(parser.attr("href", x.querySelector('.book-name'))),
