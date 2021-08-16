@@ -146,7 +146,7 @@ async function search(filter, page) {
 
 async function getChapters(novelUrl) {
     var page = 1;
-    var result = [];
+    var result = {};
     while (page > 0) {
         var url = novelUrl + "/page-" + page;
         var items = parser.jq(await HttpClient.getHtml(url)).find(".chapter-list a");
@@ -157,9 +157,9 @@ async function getChapters(novelUrl) {
 
 
 
-        var resultA = items.map((x) => {
-            return new Chapter(x.attr("title").text(), x.attr("href").url());
-        });
+        var resultA = items.reduce((arr, x) => {
+            arr[x.attr("title").text() + x.attr("href").url()] = new Chapter(x.attr("title").text(), x.attr("href").url());
+        }, {});
 
         if (parser.validateChapters(resultA, result) == false) {
             page = 0;
@@ -167,7 +167,9 @@ async function getChapters(novelUrl) {
         }
         page++;
     }
-    return result;
+
+    console.log("end of getChapters");
+    return Object.values(result);
 }
 
 
