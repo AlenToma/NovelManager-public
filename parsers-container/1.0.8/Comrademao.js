@@ -127,7 +127,7 @@ async function getNovel(novelUrl, basicInfo) {
         try {
             var node = container.select("#NovelInfo > p");
 
-            novelReviews.genres = node.findAt(1).find("a").map(x => x.innerHTML.htmlText(false));
+            novelReviews.genres = node.findAt(1).find("a").map(x => x.text());
             novelReviews.author = node.findAt(2).select("a").text();
             novelReviews.completed = node.last().select("a").text() === "Complete" ? "Status:Completed" : "Status:Ongoing";
             novelReviews.authorUrl = nodes.findAt(2).select("a").attr("href").text();

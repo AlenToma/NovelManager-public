@@ -157,7 +157,7 @@ async function getChapters(novelUrl) {
         }
 
         var resultA = container.find(".chapter-list a").map((x) => {
-            var ch = new Chapter(x.attr("title"), x.attr("href").url());
+            var ch = new Chapter(x.attr("title").text(), x.attr("href").url());
             if (result.find((a) => a.chapterUrl == ch.chapterUrl && a.name == ch.name) === undefined)
                 return ch;
             return undefined;
