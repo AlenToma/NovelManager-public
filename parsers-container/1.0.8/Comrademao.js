@@ -142,7 +142,7 @@ async function getNovel(novelUrl, basicInfo) {
         container.select('title').text().replace("Comrade Mao", "").replace("-", "").trim(),
         container.find('#NovelInfo .columns .column').last().innerHTML(),
         novelUrl,
-        chapters.reverse(),
+        chapters,
         novelReviews,
         parser.name,
         undefined,
