@@ -158,7 +158,7 @@ async function latest(page) {
     data.forEach((x) => {
         if (parser.attr("src", x.querySelector('img')) != "")
             result.push(
-                new LightItem(async () => { return (await getNovel(parser.uurl(parser.attr("href", x.querySelector('.truyen-title a'))), true)).image },
+                new LightItem(async () => { return (await parser.getNovel(parser.uurl(parser.attr("href", x.querySelector('.truyen-title a'))), true)).image },
                     parser.text(x.querySelector('.truyen-title a'), false),
                     '',
                     parser.uurl(parser.attr("href", x.querySelector('.truyen-title a'))), parser.name
