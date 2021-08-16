@@ -71,7 +71,7 @@ async function search(filter, page) {
         result.push(
             new LightItem(
                 x.select('img').attr("src").url(),
-                x.select('img').attr("alt").text(false),
+                x.select('img').attr("alt | title").text(false),
                 '',
                 x.select('.book-name').attr("href").url(),
                 parser.name
@@ -93,7 +93,7 @@ async function getNovel(novelUrl, ignoreChapters) {
             );
         });
     }
-    novelReviews.genres = container.find(".base-info .book-catalog .txt").map(x => x.text(false));
+    novelReviews.genres = container.find(".base-info .book-catalog .txt").textArray();
     novelReviews.author = container.select(".author .name").text(false);
     novelReviews.uvotes = container.select(".score").text(false) + " / 10";
     novelReviews.completed = container.select(".base-info .book-state .txt").text(false) === "Completed" ? "Status:Completed" : "Status:Ongoing";
@@ -118,7 +118,7 @@ async function latest(page) {
     var result = [];
 
     container.find('.update-content').forEach((x) => {
-        var u = x.select('.item-title a').attr("href");
+        var u = x.select('.item-title a').attr("href").text(false);
         var title = x.select('.item-title a').text(false);
         if (u != "" && !result.find((x) => u.uri(parser.url) == x.novel || title == x.title))
             result.push(
