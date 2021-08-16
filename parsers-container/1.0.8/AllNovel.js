@@ -55,7 +55,7 @@ async function search(filter, page) {
     var items = Array.from(container.querySelectorAll(".list-novel a"));
     var result = [];
     items.forEach(x => {
-        result.push(new LightItem(parser.uurl(parser.attr("src", container.querySelector('img'))),
+        result.push(new LightItem(parser.uurl(parser.attr("src", x.querySelector('img'))),
             parser.text(x.querySelector(".title-home-novel"), false),
             "",
             parser.uurl(parser.attr("href", x)), parser.name));
