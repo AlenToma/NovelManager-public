@@ -69,7 +69,7 @@ async function getNovel(novelUrl) {
     var container = parser.jq(await HttpClient.getHtml(novelUrl));
     var chapters = container.find(".list-page-novel a").map(x => new Chapter(x.text(false), x.attr("href").url()));
     var novelReviews = new NovelReviews();
-    var info = container.select(".list-info");
+    var info = container.find(".list-info");
     novelReviews.genres = info.findAt(1).find("a").textArray();
     novelReviews.author = info.findAt(0).select("a").text(false);
     novelReviews.uvotes = info.findAt(2).select("span").hasElement() ? info.findAt(2).select("span").text(false) + " Views" : "";
