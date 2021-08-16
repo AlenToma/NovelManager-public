@@ -75,17 +75,9 @@ function parserDetali() {
 async function search(filter, page) {
     var genreUrl = "genre/{g}?page={p}".uri(parser.url).replace("{p}", page.toString());
     var sortTypeUrl = "{s}?page={p}".uri(parser.url).replace("{p}", page.toString());
-    var q =
-        filter.genres.length > 0
-            ? genreUrl.replace("{g}", filter.genres[0])
-            : filter.sortType && filter.sortType != ''
-                ? sortTypeUrl.replace("{s}", filter.sortType)
-                : undefined;
+    var q = filter.genres.length > 0 ? genreUrl.replace("{g}", filter.genres[0]) : filter.sortType && filter.sortType != '' ? sortTypeUrl.replace("{s}", filter.sortType) : undefined;
 
-    var query = q ? q :
-        parser.searchUrl
-            .replace('{q}', filter.title)
-            .replace('{p}', page.toString());
+    var query = q ? q : parser.searchUrl.replace('{q}', filter.title).replace('{p}', page.toString());
     var container = await HttpClient.getHtml(query);
     var data = container.querySelectorAll('.list-novel .row');
     var result = [];
@@ -97,7 +89,8 @@ async function search(filter, page) {
                     parser.text(x.querySelector('.novel-title a'), false),
                     '',
                     parser.uurl(parser.attr("href", x.querySelector('.novel-title a')))
-                    , parser.name
+                    ,
+                    parser.name
                 ),
             );
     });
@@ -107,16 +100,15 @@ async function search(filter, page) {
 
 async function getChapters(novelUrl, htmlContainer) {
     var chapters = [];
-    var url = parser.chaptersUrl.replace('{id}',
-        parser.attr('data-novel-id', htmlContainer.querySelector('#rating')) !== "" ?
-            parser.attr('data-novel-id', htmlContainer.querySelector('#rating')) :
-            parser.attr('data-novel-id', htmlContainer.querySelector('[data-novel-id]'))
+    var url = parser.chaptersUrl.replace('{id}', (parser.attr('data-novel-id', htmlContainer.querySelector('#rating')) !== "" ?
+        parser.attr('data-novel-id', htmlContainer.querySelector('#rating')) :
+        parser.attr('data-novel-id', htmlContainer.querySelector('[data-novel-id]')))
     );
 
     var container = await HttpClient.getHtml(url);
     var htmlChapters = container.querySelectorAll('option');
     htmlChapters.forEach(x => {
-        var aUrl = parser.uurl(parser.attr("value", a));
+        var aUrl = parser.uurl(parser.attr("value", x));
         var title = parser.text(a);
         if (aUrl && aUrl !== '')
             chapters.push(new Chapter(title, aUrl));
@@ -160,7 +152,7 @@ async function latest(page) {
     var result = [];
     var data = container.querySelectorAll('.list-novel .row');
     data.forEach((x) => {
-        if (x.querySelector('img')?.getAttribute('src'))
+        if (parser.attr("src", x.querySelector('img')) !== "")
             result.push(
                 new LightItem(
                     parser.uurl(parser.attr("src", x.querySelector('img')).replace(/\d+x\d+/, "150x170")),
