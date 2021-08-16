@@ -125,7 +125,7 @@ async function getNovel(novelUrl) {
         item.genres = tbInfo.findAt(3).find(".table-value a").map(x => x.text(false));
     else if (tbInfo.length() == 3)
         item.genres = tbInfo.findAt(2).find(".table-value a").map(x => x.text(false));
-    item.description = container.select(".panel-story-info-description")
+    item.description = container.select(".panel-story-info-description").text(false)
 
     item.uvotes = container.select("em[typeof='v:Rating']").text(false).replace(/\r?\n|\r/g, " ");
     item.alternativeNames = tbInfo.length() > 3 ? tbInfo.findAt(0).select("#editassociated").text(false) : "";
