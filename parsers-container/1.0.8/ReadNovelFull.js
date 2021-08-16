@@ -109,7 +109,7 @@ async function getChapters(novelUrl, htmlContainer) {
     var htmlChapters = container.querySelectorAll('option');
     htmlChapters.forEach(x => {
         var aUrl = parser.uurl(parser.attr("value", x));
-        var title = parser.text(a);
+        var title = parser.text(x);
         if (aUrl && aUrl !== '')
             chapters.push(new Chapter(title, aUrl));
     });
