@@ -169,7 +169,7 @@ async function getChapters(novelUrl) {
         resultA.forEach((x) => {
             result.push(x);
         });
-        await parser.delay(100);
+        await parser.delay(1);
         page++;
     }
     return result;
