@@ -1,8 +1,5 @@
 function parserDetali() {
     var item = {};
-
-
-
     item.id = "1.wuxiaworld";
     item.detaliItemType = DetaliItemType.Novel;
     item.parserLanguage = "en";
@@ -128,19 +125,10 @@ async function getNovel(novelUrl) {
         );
     });
 
-    var desc = '';
-
-    Array.from(container.querySelector('.novel-bottom')?.childNodes ?? [])
-        .filter((x) => parser.outerHTML(x))
-        .forEach((x, i) => {
-            var node = x;
-            if (i <= 3 && node && node.outerHTML) desc += node.outerHTML;
-        });
-
     return new DetaliItem(
         parser.uurl(parser.attr("src", container.querySelector('.img-thumbnail'))),
         parser.text(container.querySelector('.novel-body h2'), false),
-        desc,
+        parser.innerHTML(Array.from(container.querySelectorAll('.novel-bottom >div')).findAt(1)),
         novelUrl,
         chapters,
         Array.from(container.querySelectorAll('.genres a')).map(x => x.innerHTML.htmlText(false)),
@@ -150,7 +138,6 @@ async function getNovel(novelUrl) {
 
 async function getChapter(url) {
     return parser.outerHTML((await HttpClient.getHtml(url)).querySelector('#chapter-content'));
-
 }
 
 async function latest(page) {
