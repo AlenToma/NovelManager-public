@@ -116,7 +116,7 @@ async function getNovel(novelUrl) {
         chapters.push(
             new Chapter(
                 x.text(false),
-                a.attr("href").url()
+                x.attr("href").url()
             ),
         );
     });

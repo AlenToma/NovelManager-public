@@ -101,8 +101,8 @@ async function search(filter, page) {
 async function getChapters(novelUrl, htmlContainer) {
     var chapters = [];
     var url = parser.chaptersUrl.replace('{id}', (htmlContainer.select('#rating').attr("data-novel-id").hasValue() ?
-        htmlContainer.select('#rating').attr("data-novel-id").hasValue() :
-        htmlContainer.select('[data-novel-id]').attr("data-novel-id").hasValue()));
+        htmlContainer.select('#rating').attr("data-novel-id").attValue() :
+        htmlContainer.select('[data-novel-id]').attr("data-novel-id").attValue()));
 
     var container = parser.jq(await HttpClient.getHtml(url));
     container.find('option').forEach(x => {
