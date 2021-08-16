@@ -151,7 +151,6 @@ async function getChapters(novelUrl) {
     while (page > 0) {
         var url = novelUrl + "/page-" + page;
         var items = parser.jq(await HttpClient.getHtml(url)).find(".chapter-list a");
-        var
         if (!items.hasElements()) {
             page = 0;
             break;
