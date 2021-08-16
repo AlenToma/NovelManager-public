@@ -187,15 +187,15 @@ async function getNovel(novelUrl) {
     var novelReviews = new NovelReviews();
     var info = container.select(".novel-info");
 
-    novelReviews.genres = info.find(".categories a").map(x => x.text(false))
+    novelReviews.genres = info.find(".categories a").textArray();
     novelReviews.author = info.select(".author a").text(false);
-    novelReviews.uvotes = "Rating:" + container.select(".rating-star strong").text() + "/5";
+    novelReviews.uvotes = "Rating:" + container.select(".rating-star strong").text(false) + "/5";
     novelReviews.description = container.select("#info .summary").innerHTML();
     novelReviews.completed = info.text(".header-stats .completed") === "Completed" ? "Status:Completed" : "Status:Ongoing";
 
     return new DetaliItem(
         getImage(container.select('.cover img')),
-        container.select(".novel-title").text(),
+        container.select(".novel-title").text(false),
         novelReviews.description,
         novelUrl,
         chapters,
@@ -217,7 +217,7 @@ async function latest(page) {
         result.push(new LightItem(getImage(x.select(".novel-cover img")),
             x.select(".novel-title").text(),
             "",
-            x.select(".cover-wrap a").attr("href").text(),
+            x.select(".cover-wrap a").attr("href").url(),
             parser.name));
     });
 
