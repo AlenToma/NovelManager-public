@@ -152,7 +152,7 @@ async function latest(page) {
         result.push(new LightItem(parser.uurl(parser.attr("src", x.querySelector("img"))),
             parser.attr("title", x.querySelector("img")),
             "",
-            parser.uurl(parser.attr("src", x.querySelector("a"))),
+            parser.uurl(parser.attr("href", x.querySelector("a"))),
             parser.name));
     });
 
