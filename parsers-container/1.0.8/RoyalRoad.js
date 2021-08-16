@@ -151,7 +151,7 @@ async function getNovel(novelUrl) {
         novelReviews.description = parser.text(container.querySelector(".description"), false);
     }
     return new DetaliItem(
-        parser.uurl(parser.attr("src", x.querySelector(".text-center img"))),
+        parser.uurl(parser.attr("src", container.querySelector(".text-center img"))),
         parser.text(container.querySelector(".fic-title h1")),
         novelReviews.description,
         novelUrl,
