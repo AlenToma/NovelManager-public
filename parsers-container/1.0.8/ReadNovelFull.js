@@ -85,7 +85,7 @@ async function search(filter, page) {
         if (x.select('img').attr("src").hasValue())
             result.push(
                 new LightItem(
-                    x.select('img').attr("src").replace(/\d+x\d+/, "150x170"),
+                    x.select('img').attr("src").url().replace(/\d+x\d+/, "150x170"),
                     x.select('.novel-title a').text(false),
                     '',
                     x.select('.novel-title a').attr("href").url()
