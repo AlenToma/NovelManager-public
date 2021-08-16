@@ -72,7 +72,7 @@ async function search(filter, page) {
     var sortTypeUrl = sortTypeUri.replace("{s}", filter.sortType).replace("{p}", page.toString());
 
     var url = filter.sortType && filter.sortType != "" ? sortTypeUrl : parser.searchUrl.replace('{q}', filter.title).replace("{p}", page.toString());
-    if (filter.genres.length)
+    if (filter.genres.length && filter.genres.length > 0)
         url = "genre/" + filter.genres[0] + "/page/${page}".uri(parser.url);
     else
         if (filter.active && (!filter.sortType || filter.sortType == ""))
