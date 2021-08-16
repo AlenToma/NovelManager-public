@@ -128,7 +128,7 @@ async function getNovel(novelUrl) {
     novelReviews.uvotes = "Rating:" + parseInt(rate ? rate : "1").toFixed(0) + "/5";
     novelReviews.completed = parser.text(container.querySelector(".widget_fic_similar"), false).indexOf("Completed") != -1 ? "Status:Completed" : "Status:Ongoing";
     return new DetaliItem(
-        parser.uurl(parser.attr("src", x.querySelector(".novel-cover img"))),
+        parser.uurl(parser.attr("src", container.querySelector(".novel-cover img"))),
         parser.text(container.querySelector('.fic_title')),
         parser.innerHTML(container.querySelector('.wi_fic_desc')),
         novelUrl,
