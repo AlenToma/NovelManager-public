@@ -73,10 +73,10 @@ async function search(filter, page) {
 
     var url = filter.sortType && filter.sortType != "" ? sortTypeUrl : parser.searchUrl.replace('{q}', filter.title).replace("{p}", page.toString());
     if (filter.genres.length && filter.genres.length > 0)
-        url = "genre/" + filter.genres[0] + "/page/{p}".uri(parser.url).replace("{p}", page.toString());
+        url = ("genre/" + filter.genres[0] + "/page/{p}").replace("{p}", page.toString()).uri(parser.url);
     else
         if (filter.active && (!filter.sortType || filter.sortType == ""))
-            url = "status/" + filter.active + "/page/{p}".uri(parser.url).replace("{p}", page.toString());
+            url = ("status/" + filter.active + "/page/{p}").replace("{p}", page.toString()).uri(parser.url);
 
     var container = parser.jq(await HttpClient.getHtml(url));
     var mybox = container.select(".mybox").hasElement();
