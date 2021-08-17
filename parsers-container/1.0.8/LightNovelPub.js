@@ -1,12 +1,3 @@
-function getImage(component) {
-    if (component === null)
-        return "";
-    var src = component.attr("data-src").attValue();
-    if (!src || src === "")
-        src = component.attr("src").attValue();
-    return parser.uurl(src);
-}
-
 function parserDetali() {
     var item = {};
     item.id = "1.lightnovelpub";
@@ -116,7 +107,7 @@ async function getGenres(filter, page) {
     var container = parser.jq(await HttpClient.getHtml(url));
     var result = [];
     container.find(".novel-item").forEach(x => {
-        result.push(new LightItem(getImage(x.select("img")),
+        result.push(new LightItem(x.select("img").attr("data-src | src").url(),
             x.select(".novel-title a").text(false),
             "",
             x.select(".novel-title a").attr("href").url(),
@@ -135,7 +126,7 @@ async function search(filter, page) {
     var html = parser.jq(container.resultview.toHtml());
     var result = [];
     html.find(".novel-item").forEach(x => {
-        result.push(new LightItem(getImage(x.select("img"), false),
+        result.push(new LightItem(x.select("img").attr("data-src | src").url(),
             x.select(".novel-title").text(false),
             "",
             x.select("a").attr("href").url(),
@@ -198,7 +189,7 @@ async function getNovel(novelUrl) {
     novelReviews.completed = info.text(".header-stats .completed") === "Completed" ? "Status:Completed" : "Status:Ongoing";
 
     return new DetaliItem(
-        getImage(container.select('.cover img')),
+        container.select(".cover img").attr("data-src | src").url(),
         container.select(".novel-title").text(false),
         novelReviews.description,
         novelUrl,
@@ -218,7 +209,7 @@ async function latest(page) {
     var container = parser.jq(await HttpClient.getHtml(url));
     var result = []
     container.find(".novel-item").forEach(x => {
-        result.push(new LightItem(getImage(x.select(".novel-cover img")),
+        result.push(new LightItem(x.select(".novel-cover img").attr("data-src | src").url(),
             x.select(".novel-title").text(),
             "",
             x.select(".cover-wrap a").attr("href").url(),
