@@ -68,120 +68,117 @@ function parserDetali() {
 
 
 async function search(filter, page) {
-    return new Promise(async (resolve) => {
-        var sortTypeUri = "https://comrademao.com/mtype/{s}/page/{p}/"
-        var sortTypeUrl = sortTypeUri.replace("{s}", filter.sortType).replace("{p}", page.toString());
 
-        var url = filter.sortType && filter.sortType != "" ? sortTypeUrl : parser.searchUrl.replace('{q}', filter.title).replace("{p}", page.toString());
-        if (filter.genres.length && filter.genres.length > 0)
-            url = ("genre/" + filter.genres[0] + "/page/{p}").replace("{p}", page.toString()).uri(parser.url);
-        else
-            if (filter.active && (!filter.sortType || filter.sortType == ""))
-                url = ("status/" + filter.active + "/page/{p}").replace("{p}", page.toString()).uri(parser.url);
+    var sortTypeUri = "https://comrademao.com/mtype/{s}/page/{p}/"
+    var sortTypeUrl = sortTypeUri.replace("{s}", filter.sortType).replace("{p}", page.toString());
 
-        var container = parser.jq(await HttpClient.getHtml(url));
-        var mybox = container.select(".mybox").hasElement();
-        var item = !mybox ? container.find("section .columns") : container.find(".mybox li");
+    var url = filter.sortType && filter.sortType != "" ? sortTypeUrl : parser.searchUrl.replace('{q}', filter.title).replace("{p}", page.toString());
+    if (filter.genres.length && filter.genres.length > 0)
+        url = ("genre/" + filter.genres[0] + "/page/{p}").replace("{p}", page.toString()).uri(parser.url);
+    else
+        if (filter.active && (!filter.sortType || filter.sortType == ""))
+            url = ("status/" + filter.active + "/page/{p}").replace("{p}", page.toString()).uri(parser.url);
 
-        var result = [];
-        item.forEach(x => {
-            var a = mybox ? x.select("h3 a") : x.find("a").last();
-            result.push(new LightItem(
-                x.select("img").attr("src").url(),
-                a.text(false), "",
-                a.attr("href").url(), parser.name));
-        });
+    var container = parser.jq(await HttpClient.getHtml(url));
+    var mybox = container.select(".mybox").hasElement();
+    var item = !mybox ? container.find("section .columns") : container.find(".mybox li");
 
-        resolve(result);
-    })
+    var result = [];
+    item.forEach(x => {
+        var a = mybox ? x.select("h3 a") : x.find("a").last();
+        result.push(new LightItem(
+            x.select("img").attr("src").url(),
+            a.text(false), "",
+            a.attr("href").url(), parser.name));
+    });
+
+    return result;
 }
 
 async function getChapters(url) {
-    return new Promise(async (resolve) => {
-        var result = {};
-        var page = 1;
 
-        while (true) {
+    var result = {};
+    var page = 1;
 
-            var pUrl = ("/page/{page}/").uri(url);
-            var item = parser.renderCounterCalls(page, pUrl);
-            page = item.page;
-            var values = await Promise.all(item.promises);
-            var breakIt = false;
+    while (true) {
 
-            values.forEach(x => {
-                if (!breakIt) {
-                    var items = parser.jq(x).find("tbody tr th a");
-                    if (!items.hasElements()) {
-                        breakIt = true;
-                    }
+        var pUrl = ("/page/{page}/").uri(url);
+        var item = parser.renderCounterCalls(page, pUrl);
+        page = item.page;
+        var values = await Promise.all(item.promises);
+        var breakIt = false;
 
-                    var resultA = items.reduce((arr, x) => {
-                        arr[x.text() + x.attr("href").url()] = new Chapter(x.text(), x.attr("href").url());
-                    }, {});
-
-                    if (parser.validateChapters(resultA, result) == false) {
-                        breakIt = true;
-                    }
+        values.forEach(x => {
+            if (!breakIt) {
+                var items = parser.jq(x).find("tbody tr th a");
+                if (!items.hasElements()) {
+                    breakIt = true;
                 }
 
-            })
-            if (breakIt)
-                break;
+                var resultA = items.reduce((arr, x) => {
+                    arr[x.text() + x.attr("href").url()] = new Chapter(x.text(), x.attr("href").url());
+                }, {});
 
-        }
-        resolve(Object.values(result));
-    });
+                if (parser.validateChapters(resultA, result) == false) {
+                    breakIt = true;
+                }
+            }
+
+        })
+        if (breakIt)
+            break;
+
+    }
+    return Object.values(result);
+
 }
 
 
 async function getNovel(novelUrl, basicInfo) {
-    return new Promise(async (resolve) => {
-        var container = parser.jq(await HttpClient.getHtml(novelUrl));
-        var chapters = basicInfo === true ? [] : await getChapters(novelUrl);
-        var novelReviews = new NovelReviews();
-        if (!basicInfo) {
-            try {
-                var node = container.find("#NovelInfo > p");
 
-                novelReviews.genres = node.findAt(1).find("a").map(x => x.text());
-                novelReviews.author = node.findAt(2).select("a").text();
-                novelReviews.completed = node.last().select("a").text() === "Complete" ? "Status:Completed" : "Status:Ongoing";
-                novelReviews.authorUrl = node.findAt(2).select("a").attr("href").text();
+    var container = parser.jq(await HttpClient.getHtml(novelUrl));
+    var chapters = basicInfo === true ? [] : await getChapters(novelUrl);
+    var novelReviews = new NovelReviews();
+    if (!basicInfo) {
+        try {
+            var node = container.find("#NovelInfo > p");
 
-            } catch (e) {
-                console.log(e);
-            }
+            novelReviews.genres = node.findAt(1).find("a").map(x => x.text());
+            novelReviews.author = node.findAt(2).select("a").text();
+            novelReviews.completed = node.last().select("a").text() === "Complete" ? "Status:Completed" : "Status:Ongoing";
+            novelReviews.authorUrl = node.findAt(2).select("a").attr("href").text();
 
+        } catch (e) {
+            console.log(e);
         }
-        resolve(new DetaliItem(
-            container.select('#NovelInfo img').attr("src").url(),
-            container.select('title').text().replace("Comrade Mao", "").replace("-", "").trim(),
-            container.find('#NovelInfo .columns .column').last().innerHTML(),
-            novelUrl,
-            chapters,
-            novelReviews,
-            parser.name,
-            undefined,
-        ));
-    });
+
+    }
+    return new DetaliItem(
+        container.select('#NovelInfo img').attr("src").url(),
+        container.select('title').text().replace("Comrade Mao", "").replace("-", "").trim(),
+        container.find('#NovelInfo .columns .column').last().innerHTML(),
+        novelUrl,
+        chapters,
+        novelReviews,
+        parser.name,
+        undefined,
+    )
+
 }
 
 async function getChapter(url) {
-    return new Promise(async (resolve) => {
-        resolve(parser.jq(await HttpClient.getHtml(url)).select("#content").outerHTML());
-    });
+    return parser.jq(await HttpClient.getHtml(url)).select("#content").outerHTML();
 }
 
 async function latest(page) {
-    return new Promise(async (resolve) => {
-        var url = parser.latestUrl.replace("{p}", page.toString());
-        var container = parser.jq(await HttpClient.getHtml(url));
-        var result = [];
-        container.find("tbody > tr > th:first-child > a").forEach(x => {
-            result.push(new LightItem(async () => (await getNovel(x.attr("href").url(), true)).image,
-                x.text(false), "", x.attr("href").url(), parser.name));
-        });
-        resolve(result);
+
+    var url = parser.latestUrl.replace("{p}", page.toString());
+    var container = parser.jq(await HttpClient.getHtml(url));
+    var result = [];
+    container.find("tbody > tr > th:first-child > a").forEach(x => {
+        result.push(new LightItem(async () => (await getNovel(x.attr("href").url(), true)).image,
+            x.text(false), "", x.attr("href").url(), parser.name));
     });
+    return result;
+
 }
