@@ -97,23 +97,36 @@ async function search(filter, page) {
 
 async function getChapters(url) {
     var result = {};
-    var page = 0;
+    var page = 1;
 
     while (true) {
-        page++;
-        var pUrl = (`/page/${page}/`).uri(url);
-        var items = parser.jq(await HttpClient.getHtml(pUrl)).find("tbody tr th a");
-        if (!items.hasElements()) {
-            break;
-        }
 
-        var resultA = items.reduce((arr, x) => {
-            arr[x.text() + x.attr("href").url()] = new Chapter(x.text(), x.attr("href").url());
-        }, {});
+        var pUrl = ("/page/{page}/").uri(url);
+        var item = parser.renderCounterCalls(page, pUrl);
+        page = item.page;
+        var values = await Promise.all(item.promises);
+        var breakIt = false;
 
-        if (parser.validateChapters(resultA, result) == false) {
+        values.forEach(x => {
+            if (!breakIt) {
+                var items = parser.jq(x).find("tbody tr th a");
+                if (!items.hasElements()) {
+                    breakIt = true;
+                }
+
+                var resultA = items.reduce((arr, x) => {
+                    arr[x.text() + x.attr("href").url()] = new Chapter(x.text(), x.attr("href").url());
+                }, {});
+
+                if (parser.validateChapters(resultA, result) == false) {
+                    breakIt = true;
+                }
+            }
+
+        })
+        if (breakIt)
             break;
-        }
+
     }
     return Object.values(result);
 }
