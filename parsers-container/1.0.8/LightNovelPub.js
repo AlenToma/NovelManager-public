@@ -149,7 +149,7 @@ async function getChapters(novelUrl) {
     var result = {};
     while (true) {
 
-        var url = novelUrl + "/page-{page}" + page;
+        var url = novelUrl + "/page-{page}";
         var item = parser.renderCounterCalls(page, url);
         page = item.page;
         var values = await Promise.all(item.promises);
