@@ -67,7 +67,7 @@ function parserDetali() {
 }
 
 
-function search(filter, page) {
+async function search(filter, page) {
     return new Promise(async (resolve) => {
         var sortTypeUri = "https://comrademao.com/mtype/{s}/page/{p}/"
         var sortTypeUrl = sortTypeUri.replace("{s}", filter.sortType).replace("{p}", page.toString());
@@ -96,7 +96,7 @@ function search(filter, page) {
     })
 }
 
-function getChapters(url) {
+async function getChapters(url) {
     return new Promise(async (resolve) => {
         var result = {};
         var page = 1;
@@ -135,7 +135,7 @@ function getChapters(url) {
 }
 
 
-function getNovel(novelUrl, basicInfo) {
+async function getNovel(novelUrl, basicInfo) {
     return new Promise(async (resolve) => {
         var container = parser.jq(await HttpClient.getHtml(novelUrl));
         var chapters = basicInfo === true ? [] : await getChapters(novelUrl);
@@ -167,13 +167,13 @@ function getNovel(novelUrl, basicInfo) {
     });
 }
 
-function getChapter(url) {
+async function getChapter(url) {
     return new Promise(async (resolve) => {
         resolve(parser.jq(await HttpClient.getHtml(url)).select("#content").outerHTML());
     });
 }
 
-function latest(page) {
+async function latest(page) {
     return new Promise(async (resolve) => {
         var url = parser.latestUrl.replace("{p}", page.toString());
         var container = parser.jq(await HttpClient.getHtml(url));
