@@ -136,68 +136,71 @@ async function search(filter, page) {
 }
 
 async function getChapters(novelUrl) {
-    var page = 1;
-    var result = {};
-    while (true) {
+    return new Promise(async (resolve) => {
+        var page = 1;
+        var result = {};
+        while (true) {
+            var url = novelUrl + "/page-{page}";
+            var item = parser.renderCounterCalls(page, url);
+            page = item.page;
+            var values = await Promise.all(item.promises);
+            var breakIt = false;
 
-        var url = novelUrl + "/page-{page}";
-        var item = parser.renderCounterCalls(page, url);
-        page = item.page;
-        var values = await Promise.all(item.promises);
-        var breakIt = false;
+            values.forEach(x => {
+                if (!breakIt) {
+                    var items = parser.jq(x).find(".chapter-list a");
+                    if (!items.hasElements()) {
+                        breakIt = true;
+                    }
 
-        values.forEach(x => {
-            if (!breakIt) {
-                var items = parser.jq(x).find(".chapter-list a");
-                if (!items.hasElements()) {
-                    breakIt = true;
+                    var resultA = items.reduce((arr, x) => {
+                        arr[x.attr("title").text() + x.attr("href").url()] = new Chapter(x.attr("title").text(), x.attr("href").url());
+                    }, {});
+
+                    if (parser.validateChapters(resultA, result) == false) {
+                        breakIt = true;
+                    }
                 }
 
-                var resultA = items.reduce((arr, x) => {
-                    arr[x.attr("title").text() + x.attr("href").url()] = new Chapter(x.attr("title").text(), x.attr("href").url());
-                }, {});
+            })
 
-                if (parser.validateChapters(resultA, result) == false) {
-                    breakIt = true;
-                }
-            }
+            if (breakIt)
+                break;
+        }
 
-        })
-
-        if (breakIt)
-            break;
-    }
-
-    return Object.values(result);
+        resolve(Object.values(result));
+    });
 }
 
 
 
 async function getNovel(novelUrl) {
-    var container = parser.jq(await HttpClient.getHtml(novelUrl));
-    var chapterUrl = container.select(".chapter-latest-container").attr("href").url();
-    if (!chapterUrl || chapterUrl == "")
-        chapterUrl = novelUrl;
-    var chapters = await getChapters(chapterUrl);
-    var novelReviews = new NovelReviews();
-    var info = container.select(".novel-info");
+    return new Promise(async (resolve) => {
+        var container = parser.jq(await HttpClient.getHtml(novelUrl));
+        var chapterUrl = container.select(".chapter-latest-container").attr("href").url();
+        if (!chapterUrl || chapterUrl == "")
+            chapterUrl = novelUrl;
+        getChapters(chapterUrl).then(chapters => {
+            var novelReviews = new NovelReviews();
+            var info = container.select(".novel-info");
+            novelReviews.genres = info.find(".categories a").textArray();
+            novelReviews.author = info.select(".author a").text(false);
+            novelReviews.uvotes = "Rating:" + container.select(".rating-star strong").text(false) + "/5";
+            novelReviews.description = container.select("#info .summary").innerHTML();
+            novelReviews.completed = info.text(".header-stats .completed") === "Completed" ? "Status:Completed" : "Status:Ongoing";
 
-    novelReviews.genres = info.find(".categories a").textArray();
-    novelReviews.author = info.select(".author a").text(false);
-    novelReviews.uvotes = "Rating:" + container.select(".rating-star strong").text(false) + "/5";
-    novelReviews.description = container.select("#info .summary").innerHTML();
-    novelReviews.completed = info.text(".header-stats .completed") === "Completed" ? "Status:Completed" : "Status:Ongoing";
-
-    return new DetaliItem(
-        container.select(".cover img").attr("data-src | src").url(),
-        container.select(".novel-title").text(false),
-        novelReviews.description,
-        novelUrl,
-        chapters,
-        novelReviews,
-        parser.name,
-        undefined,
-    );
+            resolve(new DetaliItem(
+                container.select(".cover img").attr("data-src | src").url(),
+                container.select(".novel-title").text(false),
+                novelReviews.description,
+                novelUrl,
+                chapters,
+                novelReviews,
+                parser.name,
+                undefined,
+            ))
+        });
+    });
 }
 
 async function getChapter(url) {
