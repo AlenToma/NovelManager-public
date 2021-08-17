@@ -145,25 +145,36 @@ async function search(filter, page) {
 }
 
 async function getChapters(novelUrl) {
-    var page = 0;
+    var page = 1;
     var result = {};
     while (true) {
-        page++;
-        var url = novelUrl + "/page-" + page;
-        var items = parser.jq(await HttpClient.getHtml(url)).find(".chapter-list a");
-        if (!items.hasElements()) {
+
+        var url = novelUrl + "/page-{page}" + page;
+        var item = parser.renderCounterCalls(page, url);
+        page = item.page;
+        var values = await Promise.all(item.promises);
+        var breakIt = false;
+
+        values.forEach(x => {
+            if (!breakIt) {
+                var items = parser.jq(x).find(".chapter-list a");
+                if (!items.hasElements()) {
+                    breakIt = true;
+                }
+
+                var resultA = items.reduce((arr, x) => {
+                    arr[x.attr("title").text() + x.attr("href").url()] = new Chapter(x.attr("title").text(), x.attr("href").url());
+                }, {});
+
+                if (parser.validateChapters(resultA, result) == false) {
+                    breakIt = true;
+                }
+            }
+
+        })
+
+        if (breakIt)
             break;
-        }
-
-
-
-        var resultA = items.reduce((arr, x) => {
-            arr[x.attr("title").text() + x.attr("href").url()] = new Chapter(x.attr("title").text(), x.attr("href").url());
-        }, {});
-
-        if (parser.validateChapters(resultA, result) == false) {
-            break;
-        }
     }
 
     return Object.values(result);
