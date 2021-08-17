@@ -96,26 +96,26 @@ async function search(filter, page) {
 }
 
 async function getChapters(url) {
-    var chapters = []
+    var result = {};
     var page = 0;
 
     while (true) {
         page++;
         var pUrl = (`/page/${page}/`).uri(url);
-        var container = parser.jq(await HttpClient.getHtml(pUrl)).find("tbody tr th a");
-        if (!container.hasElements()) {
+        var items = parser.jq(await HttpClient.getHtml(pUrl)).find("tbody tr th a");
+        if (!items.hasElements()) {
             break;
         }
 
-        var newChaps = container.map(x => {
-            return new Chapter(x.text(false), x.attr("href").url());
-        }).filter(f => f.chapterUrl && f.chapterUrl.length > 0 && !chapters.find(x => x.chapterUrl == f.chapterUrl));
-        if (newChaps.length <= 0)
-            break;
-        chapters = chapters.concat(newChaps);
-    }
-    return chapters;
+        var resultA = items.reduce((arr, x) => {
+            arr[x.text() + x.attr("href").url()] = new Chapter(x.text(), x.attr("href").url());
+        }, {});
 
+        if (parser.validateChapters(resultA, result) == false) {
+            break;
+        }
+    }
+    return Object.values(result);
 }
 
 

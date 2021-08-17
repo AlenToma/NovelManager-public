@@ -145,13 +145,13 @@ async function search(filter, page) {
 }
 
 async function getChapters(novelUrl) {
-    var page = 1;
+    var page = 0;
     var result = {};
-    while (page > 0) {
+    while (true) {
+        page++;
         var url = novelUrl + "/page-" + page;
         var items = parser.jq(await HttpClient.getHtml(url)).find(".chapter-list a");
         if (!items.hasElements()) {
-            page = 0;
             break;
         }
 
@@ -162,13 +162,10 @@ async function getChapters(novelUrl) {
         }, {});
 
         if (parser.validateChapters(resultA, result) == false) {
-            page = 0;
             break;
         }
-        page++;
     }
 
-    console.log("end of getChapters");
     return Object.values(result);
 }
 
