@@ -1,25 +1,18 @@
-function parserDetali() {
-    var item = {};
-    item.defaultFiter = new Filter();
-    item.sections = [
-        new Section("latest", "Latest Update", "Latest", true),
-        new Section("hot", "Hot Novel", "Search", false, new Filter(undefined, "hot-novel")),
-        new Section("completed", "Completed Novel", "Search", false, new Filter(undefined, "completed-novel")),
-        new Section("popular", "Most Popular", "Search", false, new Filter(undefined, "most-popular"))
-    ]
-
-    item.id = "1.novelfull";
-    item.detaliItemType = DetaliItemType.Novel;
-    item.parserLanguage = "en";
-    item.name = 'NovelFull';
-    item.latestUrl = 'https://novelfull.com/latest-release-novel?page={p}';
-    item.url = 'https://novelfull.com';
-    item.searchUrl = 'https://novelfull.com/search?keyword={q}&page={p}';
-    item.panination = true;
-    item.searchPagination = true;
-    item.icon = 'https://novelfull.com/web/images/favicon.ico';
-    item.parserSearchSettings = new ParserSearchSettings();
-    item.parserSearchSettings.genres = {
+export default `(Section, Chapter, HttpClient, DetaliItem, LightItem, ParserSearchSettings, Filter, labelValue, DetaliItemType, NovelReviews, client, ImageHandler) => {
+    const returnObject = {};
+    returnObject.id = "1.novelfull";
+    returnObject.detaliItemType = DetaliItemType.Novel;
+    returnObject.parserLanguage = "en";
+    returnObject.name = 'NovelFull';
+    returnObject.latestUrl = 'https://novelfull.com/latest-release-novel?page={p}';
+    returnObject.url = 'https://novelfull.com';
+    returnObject.searchUrl = 'https://novelfull.com/search?keyword={q}&page={p}';
+    returnObject.chaptersUrl = 'https://novelfull.com/ajax-chapter-option?novelId={id}';
+    returnObject.panination = true;
+    returnObject.searchPagination = true;
+    returnObject.icon = 'https://novelfull.com/web/images/favicon.ico';
+    returnObject.parserSearchSettings = new ParserSearchSettings();
+    returnObject.parserSearchSettings.genres = {
         multiSelection: false,
         values: [
             new labelValue('Shounen'),
@@ -57,9 +50,9 @@ function parserDetali() {
             new labelValue('Kỳ Tích Vương Tọa', 'Kỳ+Tích+Vương+Tọa'),
             new labelValue('MT'),
         ],
-    };
+    }
 
-    item.parserSearchSettings.sortTypes = {
+    returnObject.parserSearchSettings.sortTypes = {
         multiSelection: false,
         values: [
             new labelValue('Latest Release Novel', 'latest-release-novel'),
@@ -67,100 +60,113 @@ function parserDetali() {
             new labelValue('Completed Novel', 'completed-novel'),
             new labelValue('Most Popular', 'most-popular'),
         ],
-    };
+    }
 
-    return item;
-}
+    returnObject.getSections = (keys) => {
+        var sections = [
+            new Section("latest", "Latest Update", "Latest", true),
+            new Section("hot", "Hot Novel", "Search", false, new Filter(undefined, "hot-novel")),
+            new Section("completed", "Completed Novel", "Search", false, new Filter(undefined, "completed-novel")),
+            new Section("popular", "Most Popular", "Search", false, new Filter(undefined, "most-popular"))
+        ]
 
-async function search(filter, page) {
-    var genreUrl = "genre/{g}?page={p}".uri(parser.url).replace("{p}", page.toString());
-    var sortTypeUrl = "{s}?page={p}".uri(parser.url).replace("{p}", page.toString());
-    var q =
-        filter.genres.length > 0
-            ? genreUrl.replace("{g}", filter.genres[0])
-            : filter.sortType && filter.sortType != ''
-                ? sortTypeUrl.replace("{s}", filter.sortType)
-                : undefined;
-    var query = q ? q :
-        parser.searchUrl
-            .replace('{q}', filter.title)
-            .replace('{p}', page.toString());
-    var container = parser.jq(await HttpClient.getHtml(query));
-    var result = []
-    container.find('.list-truyen .row').forEach((x) => {
-        if (x.select('img').attr("src").hasValue())
-            result.push(
-                new LightItem(async () => { return (await getNovel(x.select('.truyen-title a').attr("href").url(), true)).image },
-                    x.select('.truyen-title a').text(false),
-                    '',
-                    x.select('.truyen-title a').attr("href").url(), parser.name
-                ),
-            );
-    });
+        return sections.filter(x => !keys || keys.includes(x.name));
+    }
 
-    return result;
-}
+    returnObject.translateSection = async (section, page) => {
+        if (section.identifier == "Latest")
+            return await returnObject.latest(page);
+        else
+            return await returnObject.search(section.filter || returnObject.defaultFilter(), page);
+    }
 
-async function getChapters(novelUrl, htmlContainer) {
-    var chapters = []
-    var url = "https://novelfull.com/ajax-chapter-option?novelId={id}".replace("{id}",
-        htmlContainer.select("#rating").attr("data-novel-id").hasValue() ?
+    returnObject.defaultFilter = () => {
+        return new Filter();
+    }
+
+    returnObject.search = async (filter, page) => {
+        var genreUrl = "genre/{g}?page={p}".uri(returnObject.url).replace("{p}", page.toString());
+        var sortTypeUrl = "{s}?page={p}".uri(returnObject.url).replace("{p}", page.toString());
+        var q = filter.genres.length > 0 ? genreUrl.replace("{g}", filter.genres[0]) : ((filter.sortType && filter.sortType != '' ? sortTypeUrl.replace("{s}", filter.sortType) : undefined));
+        var query = q || returnObject.searchUrl.replace('{q}', filter.title || "").replace('{p}', page.toString());
+        var container = returnObject.parser.jq(await HttpClient.getHtml(query));
+        var result = [];
+        container.find('.list-truyen .row').forEach((x) => {
+            if (x.select('img').attr("src").hasValue())
+                result.push(
+                    new LightItem(new ImageHandler(returnObject.url, x.select('.truyen-title a').attr("href").url(), ".book img"),
+                        x.select('.truyen-title a').text(false),
+                        '',
+                        x.select('.truyen-title a').attr("href").url(), returnObject.name
+                    ),
+                );
+        });
+
+        return result;
+    }
+
+    returnObject.getChapters = async (novelUrl, htmlContainer) => {
+        var chapters = [];
+        var url = "https://novelfull.com/ajax-chapter-option?novelId={id}".replace("{id}",
+            htmlContainer.select("#rating").attr("data-novel-id").hasValue() ?
             htmlContainer.select("#rating").attr("data-novel-id").text() :
             htmlContainer.select("[data-novel-id]").attr("data-novel-id").text());
 
-    var container = parser.jq(await HttpClient.getHtml(url));
+        var container = returnObject.parser.jq(await HttpClient.getHtml(url));
 
-    container.find('option').forEach(a => {
-        var aUrl = a.attr("value").url();
-        var title = a.innerHTML();
-        if (url && url !== '') chapters.push(new Chapter(title, aUrl));
-    })
+        container.find('option').forEach(a => {
+            var aUrl = a.attr("value").url();
+            var title = a.text(false);
+            if (url && url !== '') chapters.push(new Chapter(title, aUrl));
+        })
+        return chapters;
+    }
+
+    returnObject.getNovel = async (novelUrl) => {
+        var container = returnObject.parser.jq(await HttpClient.getHtml(novelUrl));
+        var chapters = await returnObject.getChapters(novelUrl, container);
+        var novelReviews = new NovelReviews();
+        var infos = container.find(".info > div");
+        novelReviews.genres = infos.eq(2).find("a").map(x => x.text(false));
+        novelReviews.author = infos.eq(0).find("a").text(false);
+        novelReviews.uvotes = container.select(".col-info-desc > .desc > .small strong:first-child span").text(false) + " / 10";
+        novelReviews.completed = infos.last().select("a").text(false) === "Completed" ? "Status:Completed" : "Status:Ongoing";
+
+        return new DetaliItem(
+            container.select('.book img').attr("src").url(),
+            container.select('.title').text(false),
+            container.select('.desc-text').cleanInnerHTML(),
+            novelUrl,
+            chapters,
+            novelReviews,
+            returnObject.name,
+            undefined,
+        );
+    }
 
 
+    returnObject.getChapter = async (url) => {
+        return returnObject.parser.jq(await new client().getHtml(url)).select('#chapter-content').cleanInnerHTML();
+    }
 
+    returnObject.latest = async (page) => {
+        var url = returnObject.latestUrl.replace('{p}', page.toString());
+        var container = returnObject.parser.jq(await HttpClient.getHtml(url));
+        var result = [];
+        container.find('.list-truyen .row').forEach((x) => {
+            if (x.select('img').attr("src").hasValue())
+                result.push(
+                    new LightItem(
+                        new ImageHandler(returnObject.url, x.select('.truyen-title a').attr("href").url(), ".book img"),
+                        x.select('.truyen-title a').text(false),
+                        '',
+                        x.select('.truyen-title a').attr("href").url(), returnObject.name
+                    ));
+        });
 
-    return chapters;
-}
+        return result;
+    }
 
-async function getNovel(novelUrl, ignoreChapters) {
-    var container = parser.jq(await HttpClient.getHtml(novelUrl));
-    var chapters = ignoreChapters ? [] : await getChapters(novelUrl, container);
-    var novelReviews = new NovelReviews();
-    var infos = container.find(".info > div");
-    novelReviews.genres = infos.findAt(2).find("a").map(x => x.text(false));
-    novelReviews.author = infos.findAt(0).find("a").textArray();
-    novelReviews.uvotes = container.select(".col-info-desc > .desc > .small strong:first-child span").text(false) + " / 10";
-    novelReviews.completed = infos.last().select("a").text(false) === "Completed" ? "Status:Completed" : "Status:Ongoing";
-    return new DetaliItem(
-        container.select('.book img').attr("src").url(),
-        container.select('.title').text(false),
-        container.select('.desc-text').outerHTML(),
-        novelUrl,
-        chapters,
-        novelReviews,
-        parser.name,
-        undefined,
-    );
-}
+    return returnObject;
 
-async function getChapter(url) {
-    return parser.jq(await HttpClient.getHtml(url)).select('#chapter-content').outerHTML();
-}
-
-async function latest(page) {
-    var url = parser.latestUrl.replace('{p}', page.toString());
-    var container = parser.jq(await HttpClient.getHtml(url));
-    var result = [];
-    container.find('.list-truyen .row').forEach((x) => {
-        if (x.select('img').attr("src").hasValue())
-            result.push(
-                new LightItem(
-                    async () => { return (await getNovel(x.select('.truyen-title a').attr("href").url(), true)).image },
-                    x.select('.truyen-title a').text(false),
-                    '',
-                    x.select('.truyen-title a').attr("href").url(), parser.name
-                ));
-    });
-
-    return result;
-}
+};`

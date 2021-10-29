@@ -1,26 +1,18 @@
-function parserDetali() {
-    var item = {};
-    item.defaultFiter = new Filter();
-    item.sections = [
-        new Section("latest", "Latest Update", "Latest", true),
-        new Section("hot", "Newest", "Search", false, new Filter(undefined, "newest")),
-        new Section("completed", "Completed", "Search", false, new Filter(undefined, undefined, undefined, "completed")),
-        new Section("popular", "Most Popular", "Search", false, new Filter(undefined, "topview"))
-    ]
-
-    item.id = "1.manganelo";
-    item.detaliItemType = DetaliItemType.Managa;
-    item.parserLanguage = "en";
-    item.name = 'ManganElo';
-    item.latestUrl = 'https://manganelo.com/genre-all/{p}';
-    item.url = 'https://manganelo.com/';
-    item.searchUrl = 'https://manganelo.com/advanced_search?s=all&page={p}';
-    item.panination = true;
-    item.searchPagination = true;
-    item.icon = 'https://manganelo.com/favicon.png';
-    item.parserSearchSettings = new ParserSearchSettings();
-    item.parserSearchSettings.multiSelection = true;
-    item.parserSearchSettings.genres = {
+export default `(Section, Chapter, HttpClient, DetaliItem, LightItem, ParserSearchSettings, Filter, labelValue, DetaliItemType, NovelReviews, client, ImageHandler) => {
+    const returnObject = {};
+    returnObject.id = "1.manganelo";
+    returnObject.detaliItemType = DetaliItemType.Managa;
+    returnObject.parserLanguage = "en";
+    returnObject.name = 'ManganElo';
+    returnObject.latestUrl = 'https://manganelo.com/genre-all/{p}';
+    returnObject.url = 'https://manganelo.com/';
+    returnObject.searchUrl = 'https://manganelo.com/advanced_search?s=all&page={p}';
+    returnObject.panination = true;
+    returnObject.searchPagination = true;
+    returnObject.icon = 'https://manganelo.com/favicon.png';
+    returnObject.parserSearchSettings = new ParserSearchSettings();
+    returnObject.parserSearchSettings.multiSelection = true;
+    returnObject.parserSearchSettings.genres = {
         multiSelection: false,
         values: [
             new labelValue('Action', 2),
@@ -66,7 +58,7 @@ function parserDetali() {
         ],
     };
 
-    item.parserSearchSettings.sortTypes = {
+    returnObject.parserSearchSettings.sortTypes = {
         multiSelection: false,
         values: [
             new labelValue('Latest Release', ''),
@@ -75,7 +67,7 @@ function parserDetali() {
         ],
     };
 
-    item.parserSearchSettings.statuses = {
+    returnObject.parserSearchSettings.statuses = {
         multiSelection: false,
         values: [
             new labelValue("Completed", "completed"),
@@ -83,94 +75,117 @@ function parserDetali() {
         ]
     }
 
-    return item;
-}
+    returnObject.getSections = (keys) => {
+        var sections = [
+            new Section("latest", "Latest Update", "Latest", true),
+            new Section("hot", "Newest", "Search", false, new Filter(undefined, "newest")),
+            new Section("completed", "Completed", "Search", false, new Filter(undefined, undefined, undefined, "completed")),
+            new Section("popular", "Most Popular", "Search", false, new Filter(undefined, "topview"))
+        ]
 
-async function search(filter, page) {
-    var url = parser.searchUrl.replace("{p}", page.toString());
-    if (filter.genres.length > 0)
-        url = ("&g_i=_" + filter.genres.join("_")).uri(url);
-    if (filter.sortType && filter.sortType != "")
-        url = ("&orby=" + filter.sortType).uri(url);
-    if (filter.active && filter.active != "")
-        url = ("&sts=" + filter.active).uri(url);
-    if (filter.title && filter.title.trim().length > 0)
-        url = ("&keyw=" + filter.title.replace(/[ ]/g, "_")).uri(url);
-    var container = parser.jq(await HttpClient.getHtml(url));
-    var result = [];
-    container.find('.content-genres-item').forEach((x) => {
-        if (x.select('.genres-item-img img').attr("src") !== "")
-            result.push(
-                new LightItem(
-                    x.select('.genres-item-img img').attr("src").url(),
-                    x.select('.genres-item-img').attr("title").text(),
-                    '',
-                    x.select('.genres-item-img').attr("href").url(),
-                    parser.name
-                ),
-            );
-    });
+        return sections.filter(x => !keys || keys.includes(x.name));
+    }
 
-    return result;
-}
+    returnObject.translateSection = async (section, page) => {
+        if (section.identifier == "Latest")
+            return await returnObject.latest(page);
+        else
+            return await returnObject.search(section.filter || returnObject.defaultFilter(), page);
+    }
+
+    returnObject.defaultFilter = () => {
+        var filter = new Filter();
+        return filter;
+    }
+
+    returnObject.search = async (filter, page) => {
+        var url = returnObject.searchUrl.replace("{p}", page.toString());
+        if (filter.genres.length > 0)
+            url = ("&g_i=_" + filter.genres.join("_")).uri(url);
+        if (filter.sortType && filter.sortType != "")
+            url = ("&orby=" + filter.sortType).uri(url);
+        if (filter.active && filter.active != "")
+            url = ("&sts=" + filter.active).uri(url);
+        if (filter.title && filter.title.trim().length > 0)
+            url = ("&keyw=" + filter.title.replace(/[ ]/g, "_")).uri(url);
+        var container = returnObject.parser.jq(await HttpClient.getHtml(url));
+        var result = [];
+        container.find('.content-genres-item').forEach((x) => {
+            if (x.select('.genres-item-img img').attr("src").hasValue())
+                result.push(
+                    new LightItem(
+                        x.select('.genres-item-img img').attr("src").url(),
+                        x.select('.genres-item-img').attr("title").text(),
+                        '',
+                        x.select('.genres-item-img').attr("href").url(),
+                        returnObject.name
+                    ),
+                );
+        });
+
+        return result;
+    }
 
 
 
-async function getNovel(novelUrl) {
-    var container = parser.jq(await HttpClient.getHtml(novelUrl));
+    returnObject.getNovel = async (novelUrl) => {
+        var container = returnObject.parser.jq(await HttpClient.getHtml(novelUrl));
 
-    var item = new NovelReviews();
-    var tbInfo = container.find(".variations-tableInfo tr")
-    if (tbInfo.length() > 3)
-        item.genres = tbInfo.findAt(3).find(".table-value a").map(x => x.text(false));
-    else if (tbInfo.length() == 3)
-        item.genres = tbInfo.findAt(2).find(".table-value a").map(x => x.text(false));
-    item.description = container.select(".panel-story-info-description").text(false)
+        var item = new NovelReviews();
+        var tbInfo = container.find(".variations-tableInfo tr")
+        if (tbInfo.length() > 3)
+            item.genres = tbInfo.eq(3).find(".table-value a").map(x => x.text(false));
+        else if (tbInfo.length() == 3)
+            item.genres = tbInfo.eq(2).find(".table-value a").map(x => x.text(false));
+        item.description = container.select(".panel-story-info-description").text(false)
 
-    item.uvotes = container.select("em[typeof='v:Rating']").text(false).replace(/\r?\n|\r/g, " ");
-    item.alternativeNames = tbInfo.length() > 3 ? tbInfo.findAt(0).select("#editassociated").text(false) : "";
-    if (tbInfo.length() > 3)
-        item.author = tbInfo.findAt(1).select(".table-value").text(false);
-    else if (tbInfo.length() > 0)
-        item.author = tbInfo.findAt(0).select(".table-value").text(false);
-    item.lang = "";
-    if (tbInfo.length() > 3)
-        item.completed = tbInfo.findAt(2).text(false).replace(/\r?\n|\r/g, " ");
-    else if (tbInfo.length() == 3)
-        item.completed = tbInfo.findAt(1).text(false).replace(/\r?\n|\r/g, " ");
-    var chapters = container.find(".row-content-chapter a").map(x => new Chapter(x.text(false), x.attr("href").url()));
-    return new DetaliItem(
-        container.select('.info-image img').attr("src").url(),
-        container.select('.story-info-right h1').text(false),
-        item.description,
-        novelUrl,
-        chapters.reverse(),
-        item,
-        parser.name,
-        undefined,
-    );
-}
+        item.uvotes = container.select("em[typeof='v:Rating']").text(false).removeNewLine(" ");
+        item.alternativeNames = tbInfo.length() > 3 ? tbInfo.eq(0).select("#editassociated").text(false) : "";
+        if (tbInfo.length() > 3)
+            item.author = tbInfo.eq(1).select(".table-value").text(false);
+        else if (tbInfo.length() > 0)
+            item.author = tbInfo.eq(0).select(".table-value").text(false);
+        item.lang = "";
+        if (tbInfo.length() > 3)
+            item.completed = tbInfo.eq(2).text(false).removeNewLine(" ");
+        else if (tbInfo.length() == 3)
+            item.completed = tbInfo.eq(1).text(false).removeNewLine(" ");
+        var chapters = container.find(".row-content-chapter a").map(x => new Chapter(x.text(false), x.attr("href").url()));
+        return new DetaliItem(
+            container.select('.info-image img').attr("src").url(),
+            container.select('.story-info-right h1').text(false),
+            item.description,
+            novelUrl,
+            chapters.reverse(),
+            item,
+            returnObject.name,
+            undefined,
+        );
+    }
 
-async function getChapter(url) {
-    return parser.jq(await HttpClient.getHtml(url)).find(".container-chapter-reader img").map(x => x.attr("src").url()).filter(x => x && x != "");
-}
+    returnObject.getChapter = async (url) => {
+        return returnObject.parser.jq(await new client().getHtml(url)).find(".container-chapter-reader img").map(x => x.attr("src").url()).filter(x => x && x != "");
+    }
 
-async function latest(page) {
-    var url = parser.latestUrl.replace('{p}', page.toString());
-    var container = parser.jq(await HttpClient.getHtml(url));
-    var result = [];
-    container.find('.content-genres-item').forEach(x => {
-        if (x.select('.genres-item-img img').attr("src").hasValue())
-            result.push(
-                new LightItem(
-                    x.select(".genres-item-img img").attr("src").text(),
-                    x.select(".genres-item-img").attr("title").text(false),
-                    '',
-                    x.select('.genres-item-img').attr("href").url(),
-                    parser.name
-                ),
-            );
-    });
+    returnObject.latest = async (page) => {
+        var url = returnObject.latestUrl.replace('{p}', page.toString());
+        var container = returnObject.parser.jq(await HttpClient.getHtml(url));
+        var result = [];
+        container.find('.content-genres-item').forEach(x => {
+            if (x.select('.genres-item-img img').attr("src").hasValue())
+                result.push(
+                    new LightItem(
+                        x.select(".genres-item-img img").attr("src").text(),
+                        x.select(".genres-item-img").attr("title").text(false),
+                        '',
+                        x.select('.genres-item-img').attr("href").url(),
+                        returnObject.name
+                    ),
+                );
+        });
 
-    return result;
-}
+        return result;
+    }
+
+    return returnObject;
+};`

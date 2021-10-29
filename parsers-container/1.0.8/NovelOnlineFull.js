@@ -1,27 +1,18 @@
-function parserDetali() {
-    var item = {};
-    item.defaultFiter = new Filter(["all"], "topview");
-    item.sections = [
-        new Section("latest", "Latest Update", "Latest", true),
-        new Section("newest", "Newest Novel", "Search", false, new Filter(undefined, "newest")),
-        new Section("top", "Top view", "Search", false, new Filter(undefined, "topview"))
-    ]
-
-    item.id = "1.novelonlinefull";
-    item.detaliItemType = DetaliItemType.Novel;
-    item.parserLanguage = "en";
-
-    item.parserLanguage = "en";
-    item.name = 'NovelOnlineFull';
-    item.latestUrl = 'https://novelonlinefull.com/novel_list?type=latest&category=all&state=all&page={p}';
-    item.url = 'https://novelonlinefull.com/';
-    item.searchUrl = 'https://novelonlinefull.com/search_novels/{q}?page={p}';
-    item.panination = true;
-    item.searchPagination = false;
-    item.icon = 'https://novelonlinefull.com/themes/home/images/favicon.png';
-    item.parserSearchSettings = new ParserSearchSettings();
-    item.parserSearchSettings.multiSelection = true;
-    item.parserSearchSettings.genres = {
+export default `(Section, Chapter, HttpClient, DetaliItem, LightItem, ParserSearchSettings, Filter, labelValue, DetaliItemType, NovelReviews, client, ImageHandler) => {
+    const returnObject = {};
+    returnObject.id = "1.novelonlinefull";
+    returnObject.detaliItemType = DetaliItemType.Novel;
+    returnObject.parserLanguage = "en";
+    returnObject.name = 'NovelOnlineFull';
+    returnObject.latestUrl = 'https://novelonlinefull.com/novel_list?type=latest&category=all&state=all&page={p}';
+    returnObject.url = 'https://novelonlinefull.com/';
+    returnObject.searchUrl = 'https://novelonlinefull.com/search_novels/{q}?page={p}';
+    returnObject.panination = true;
+    returnObject.searchPagination = false;
+    returnObject.icon = 'https://novelonlinefull.com/themes/home/images/favicon.png';
+    returnObject.parserSearchSettings = new ParserSearchSettings();
+    returnObject.parserSearchSettings.multiSelection = true;
+    returnObject.parserSearchSettings.genres = {
         multiSelection: false,
         values: [
             new labelValue("All", "all"),
@@ -79,7 +70,7 @@ function parserDetali() {
         ]
     }
 
-    item.parserSearchSettings.sortTypes = {
+    returnObject.parserSearchSettings.sortTypes = {
         multiSelection: false,
         values: [
             new labelValue('Latest', 'latest'),
@@ -88,70 +79,92 @@ function parserDetali() {
         ],
     };
 
-    return item;
-}
+    returnObject.getSections = (keys) => {
+        var sections = [
+            new Section("latest", "Latest Update", "Latest", true),
+            new Section("newest", "Newest Novel", "Search", false, new Filter(undefined, "newest")),
+            new Section("top", "Top view", "Search", false, new Filter(undefined, "topview"))
+        ]
+
+        return sections.filter(x => !keys || keys.includes(x.name));
+    }
+
+    returnObject.translateSection = async (section, page) => {
+        if (section.identifier == "Latest")
+            return await returnObject.latest(page);
+        else
+            return await returnObject.search(section.filter || returnObject.defaultFilter(), page);
+    }
+
+    returnObject.defaultFilter = () => {
+        return new Filter(["all"], "topview");
+    };
 
 
-async function search(filter, page) {
-    var sortTypeUri = "https://novelonlinefull.com/novel_list?type={s}&category={g}&state=all&page={p}"
-    var sortTypeUrl = sortTypeUri.replace("{s}", filter.sortType).replace("{p}", page.toString()).replace("{g}", filter.genres.length > 0 ? filter.genres[0] : "all");
+    returnObject.search = async (filter, page) => {
+        var sortTypeUri = "https://novelonlinefull.com/novel_list?type={s}&category={g}&state=all&page={p}"
+        var sortTypeUrl = sortTypeUri.replace("{s}", filter.sortType).replace("{p}", page.toString()).replace("{g}", filter.genres.length > 0 ? filter.genres[0] : "all");
 
-    var url = (!filter.title || filter.title == "") && filter.sortType && filter.sortType != '' ? sortTypeUrl : parser.searchUrl.replace('{q}', (filter.title).replace(/[ ]/, "_"));
+        var url = (!filter.title || filter.title == "") && filter.sortType && filter.sortType != '' ? sortTypeUrl : returnObject.searchUrl.replace('{q}', (filter.title || "").replace(/[ ]/, "_"));
 
-    var container = parser.jq(await HttpClient.getHtml(url));
-    var result = [];
-    container.find(".update_item, .itemupdate").forEach(x => {
-        result.push(new LightItem(x.select("img").attr("src").url(),
-            x.select("img").attr("alt | title").text(false),
-            "",
-            x.select("a").attr("href").url(),
-            parser.name));
-    });
+        var container = returnObject.parser.jq(await HttpClient.getHtml(url));
+        var result = [];
+        container.find(".update_item, .itemupdate").forEach(x => {
+            result.push(new LightItem(x.select("img").attr("src").url(),
+                x.select("img").attr("alt | title").text(false),
+                "",
+                x.select("a").attr("href").url(),
+                returnObject.name));
+        });
 
-    return result;
+        return result;
 
-}
+    }
 
-async function getNovel(novelUrl) {
-    var container = parser.jq(await HttpClient.getHtml(novelUrl));
-    var chapters = container.find(".chapter-list .row a").map(x => new Chapter(x.text(false), x.attr("href").url()));
-    var novelReviews = new NovelReviews();
-    var infos = container.find(".truyen_info_right li")
+    returnObject.getNovel = async (novelUrl) => {
+        var container = returnObject.parser.jq(await HttpClient.getHtml(novelUrl));
+        var chapters = container.find(".chapter-list .row a").map(x => new Chapter(x.text(false), x.attr("href").url()));
+        var novelReviews = new NovelReviews();
+        var infos = container.find(".truyen_info_right li")
 
 
-    novelReviews.genres = infos.findAt(2).find("a").textArray();
-    novelReviews.author = infos.findAt(1).find("a").text();
-    novelReviews.uvotes = infos.findAt(6).text(false);
-    novelReviews.description = infos.select("#noidungm").text(false);
-    novelReviews.completed = infos.findAt(3).select("a").text(false) === "Completed" ? "Status:Completed" : "Status:Ongoing";
+        novelReviews.genres = infos.eq(2).find("a").textArray();
+        novelReviews.author = infos.eq(1).find("a").text();
+        novelReviews.uvotes = infos.eq(6).text(false);
+        novelReviews.description = infos.select("#noidungm").text(false);
+        novelReviews.completed = infos.eq(3).select("a").text(false) === "Completed" ? "Status:Completed" : "Status:Ongoing";
 
-    return new DetaliItem(
-        container.select(".info_image img").attr("src").url(),
-        container.select('.truyen_info_right h1').text(false),
-        container.select('#noidungm').innerHTML(),
-        novelUrl,
-        chapters.reverse(),
-        novelReviews,
-        parser.name,
-        undefined,
-    );
-}
+        return new DetaliItem(
+            container.select(".info_image img").attr("src").url(),
+            container.select('.truyen_info_right h1').text(false),
+            container.select('#noidungm').cleanInnerHTML(),
+            novelUrl,
+            chapters.reverse(),
+            novelReviews,
+            returnObject.name,
+            undefined,
+        );
+    }
 
-async function getChapter(url) {
-    return parser.jq(await HttpClient.getHtml(url)).select(".vung_doc").outerHTML();
-}
 
-async function latest(page) {
-    var url = parser.latestUrl.replace("{p}", page.toString());
-    var container = parser.jq(await HttpClient.getHtml(url));
-    var result = [];
-    container.find(".update_item").forEach(x => {
-        result.push(new LightItem(x.select("img").attr("src").url(),
-            x.select("img").attr("title").text(false),
-            "",
-            x.select("a").attr("href").url(),
-            parser.name));
-    });
+    returnObject.getChapter = async (url) => {
+        return returnObject.parser.jq(await new client().getHtml(url)).select(".vung_doc").cleanInnerHTML();
+    }
 
-    return result;
-}
+    returnObject.latest = async (page) => {
+        var url = returnObject.latestUrl.replace("{p}", page.toString());
+        var container = returnObject.parser.jq(await HttpClient.getHtml(url));
+        var result = [];
+        container.find(".update_item").forEach(x => {
+            result.push(new LightItem(x.select("img").attr("src").url(),
+                x.select("img").attr("title").text(false),
+                "",
+                x.select("a").attr("href").url(),
+                returnObject.name));
+        });
+
+        return result;
+    }
+
+    return returnObject;
+};`
