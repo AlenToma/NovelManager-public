@@ -1,4 +1,4 @@
-export default `(Section, Chapter, HttpClient, DetaliItem, LightItem, ParserSearchSettings, Filter, labelValue, DetaliItemType, NovelReviews, client) => {
+(Section, Chapter, HttpClient, DetaliItem, LightItem, ParserSearchSettings, Filter, labelValue, DetaliItemType, NovelReviews, client) => {
 	const returnObject = {};
 	returnObject.id = "1.readnovelfull";
 	returnObject.parserLanguage = "en";
@@ -120,4 +120,4 @@ export default `(Section, Chapter, HttpClient, DetaliItem, LightItem, ParserSear
 		return result;
 	}
 	return returnObject;
-};`
+};

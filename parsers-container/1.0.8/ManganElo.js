@@ -1,4 +1,4 @@
-export default `(Section, Chapter, HttpClient, DetaliItem, LightItem, ParserSearchSettings, Filter, labelValue, DetaliItemType, NovelReviews, client, ImageHandler) => {
+(Section, Chapter, HttpClient, DetaliItem, LightItem, ParserSearchSettings, Filter, labelValue, DetaliItemType, NovelReviews, client, ImageHandler) => {
     const returnObject = {};
     returnObject.id = "1.manganelo";
     returnObject.detaliItemType = DetaliItemType.Managa;
@@ -188,4 +188,4 @@ export default `(Section, Chapter, HttpClient, DetaliItem, LightItem, ParserSear
     }
 
     return returnObject;
-};`
+};

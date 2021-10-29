@@ -1,4 +1,4 @@
-export default `(Section, Chapter, HttpClient, DetaliItem, LightItem, ParserSearchSettings, Filter, labelValue, DetaliItemType, NovelReviews, client) => {
+(Section, Chapter, HttpClient, DetaliItem, LightItem, ParserSearchSettings, Filter, labelValue, DetaliItemType, NovelReviews, client) => {
     var returnObject = {};
     returnObject.id = "1.comrademao";
     returnObject.detaliItemType = DetaliItemType.Novel;
@@ -190,4 +190,4 @@ export default `(Section, Chapter, HttpClient, DetaliItem, LightItem, ParserSear
     }
 
     return returnObject;
-};`
+};
