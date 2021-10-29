@@ -1,0 +1,66 @@
+[
+    {
+        "file": "readnovelfull.js",
+        "debugOnly": false
+    },
+    {
+        "file": "wuxiaworld.js",
+        "debugOnly": false
+    },
+    {
+        "file": "manganelo.js",
+        "debugOnly": false
+    },
+    {
+        "file": "novelfull.js",
+        "debugOnly": false
+    },
+    {
+        "file": "allnovel.js",
+        "debugOnly": false
+    },
+    {
+        "file": "comrademao.js",
+        "debugOnly": false
+    },
+    {
+        "file": "lightnovelpub.js",
+        "debugOnly": false
+    },
+    {
+        "file": "novelOnlineFull.js",
+        "debugOnly": false
+    },
+    {
+        "file": "readlightNovel.js",
+        "debugOnly": false
+    },
+    {
+        "file": "royalroad.js",
+        "debugOnly": false
+    },
+    {
+        "file": "scribblehub.js",
+        "debugOnly": false
+    },
+    {
+        "file": "zinnovel.js",
+        "debugOnly": false
+    },
+    {
+        "file": "tapread.js",
+        "debugOnly": false
+    },
+    {
+        "file": "mtlnovel.js",
+        "debugOnly": true
+    },
+    {
+        "file": "kolnovel.js",
+        "debugOnly": true
+    },
+    {
+        "file": "wuxiaworld_site.js",
+        "debugOnly": true
+    }
+]
