@@ -33,7 +33,7 @@
     },
     {
         "file": "ReadlightNovel.js",
-        "debugOnly": false
+        "debugOnly": true
     },
     {
         "file": "Royalroad.js",
