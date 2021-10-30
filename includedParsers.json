@@ -1,66 +1,66 @@
 [
     {
-        "file": "Readnovelfull.js",
+        "file": "ReadNovelFull",
         "debugOnly": false
     },
     {
-        "file": "Wuxiaworld.js",
+        "file": "Wuxiaworld",
         "debugOnly": false
     },
     {
-        "file": "Manganelo.js",
+        "file": "ManganElo",
         "debugOnly": false
     },
     {
-        "file": "Novelfull.js",
+        "file": "NovelFull",
         "debugOnly": false
     },
     {
-        "file": "Allnovel.js",
+        "file": "AllNovel",
         "debugOnly": false
     },
     {
-        "file": "Comrademao.js",
+        "file": "Comrademao",
         "debugOnly": false
     },
     {
-        "file": "Lightnovelpub.js",
+        "file": "LightNovelPub",
         "debugOnly": false
     },
     {
-        "file": "NovelOnlineFull.js",
+        "file": "NovelOnlineFull",
         "debugOnly": false
     },
     {
-        "file": "ReadlightNovel.js",
+        "file": "ReadLightNovel",
         "debugOnly": true
     },
     {
-        "file": "Royalroad.js",
+        "file": "RoyalRoad",
         "debugOnly": false
     },
     {
-        "file": "Scribblehub.js",
+        "file": "ScribbleHub",
         "debugOnly": false
     },
     {
-        "file": "Zinnovel.js",
+        "file": "ZinNovel",
         "debugOnly": false
     },
     {
-        "file": "Tapread.js",
+        "file": "TapRead",
         "debugOnly": false
     },
     {
-        "file": "Mtlnovel.js",
+        "file": "MtlNovel",
         "debugOnly": true
     },
     {
-        "file": "Kolnovel.js",
+        "file": "KolNovel",
         "debugOnly": true
     },
     {
-        "file": "Wuxiaworld_site.js",
+        "file": "Wuxiaworld.Site",
         "debugOnly": true
     }
 ]
