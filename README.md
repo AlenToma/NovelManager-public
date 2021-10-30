@@ -43,7 +43,7 @@ Those are the available sources and also sources that will be implemented in the
 | [ReadLightNovel](https://www.readlightnovel.cc)  | Yes  |
 | [ReadNovelFull](https://readnovelfull.com)  | Yes  |
 | [Wuxiaworld](https://www.wuxiaworld.com)  | Yes  |
-| [Wuxiaworld.Site](https://www.wuxiaworld.com)  | Yes  |
+| [Wuxiaworld.Site](https://wuxiaworld.site)  | Yes  |
 | [NovelOnlineFull](https://novelonlinefull.com)  | Yes  |
 | [Comrademao](https://comrademao.com/mtype/chinese/)  | Yes  |
 | [WebNovelOnline](https://webnovelonline.com/)  | Not Yet  |
