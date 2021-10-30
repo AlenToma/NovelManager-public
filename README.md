@@ -1,5 +1,5 @@
 # NovelManager
-![Icons](https://github.com/AlenToma/NovelManager-public/blob/main/Screenshots/Icons/res/mipmap-xhdpi/ic_launcher.png?raw=true)
+![Icons](https://raw.githubusercontent.com/AlenToma/NovelManager-public/master/Screenshots/Icons/res/mipmap-hdpi/ic_launcher.png)
 
  Massive Exclusive Novels from multiple source all here in this app.
 
