@@ -60,14 +60,10 @@ Those are the available sources and also sources that will be implemented in the
 | [ChapterUpdates](https://www.chapterupdates.com)  | Not Yet  |
 
 <div>
-<img style="margin-left:5px" src="https://github.com/AlenToma/NovelManager-public/blob/main/Screenshots/Screenshot_20210221-201253_NovelManager.jpg" width="150">
-<img style="margin-left:5px" src="https://github.com/AlenToma/NovelManager-public/blob/main/Screenshots/Screenshot_20210221-201315_NovelManager.jpg" width="150">
-<img style="margin-left:5px" src="https://github.com/AlenToma/NovelManager-public/blob/main/Screenshots/Screenshot_20210221-201354_NovelManager.jpg" width="150">
-<img style="margin-left:5px" src="https://github.com/AlenToma/NovelManager-public/blob/main/Screenshots/Screenshot_20210221-201359_NovelManager.jpg" width="150">
-<img style="margin-left:5px" src="https://github.com/AlenToma/NovelManager-public/blob/main/Screenshots/Screenshot_20210221-201414_NovelManager.jpg" width="150">
-<img style="margin-left:5px" src="https://github.com/AlenToma/NovelManager-public/blob/main/Screenshots/Screenshot_20210221-201431_NovelManager.jpg" width="150">
-<img style="margin-left:5px" src="https://github.com/AlenToma/NovelManager-public/blob/main/Screenshots/Screenshot_20210221-201504_NovelManager.jpg" width="150">
-<img style="margin-left:5px" src="https://github.com/AlenToma/NovelManager-public/blob/main/Screenshots/Screenshot_20210221-201836_NovelManager.jpg" width="150">
+<img style="margin-left:5px" src="https://raw.githubusercontent.com/AlenToma/NovelManager-public/master/Screenshots/image1.jpeg" width="150">
+<img style="margin-left:5px" src="https://raw.githubusercontent.com/AlenToma/NovelManager-public/master/Screenshots/image2.jpeg" width="150">
+<img style="margin-left:5px" src="https://raw.githubusercontent.com/AlenToma/NovelManager-public/master/Screenshots/image3.jpeg" width="150">
+<img style="margin-left:5px" src="https://raw.githubusercontent.com/AlenToma/NovelManager-public/master/Screenshots/image4.jpeg" width="150">
  <div>
 
 
