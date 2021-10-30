@@ -43,6 +43,7 @@ Those are the available sources and also sources that will be implemented in the
 | [ReadLightNovel](https://www.readlightnovel.cc)  | Yes  |
 | [ReadNovelFull](https://readnovelfull.com)  | Yes  |
 | [Wuxiaworld](https://www.wuxiaworld.com)  | Yes  |
+| [Wuxiaworld.Site](https://www.wuxiaworld.com)  | Yes  |
 | [NovelOnlineFull](https://novelonlinefull.com)  | Yes  |
 | [Comrademao](https://comrademao.com/mtype/chinese/)  | Yes  |
 | [WebNovelOnline](https://webnovelonline.com/)  | Not Yet  |
@@ -53,8 +54,8 @@ Those are the available sources and also sources that will be implemented in the
 | [Fsapk](https://fsapk.com)  | Not Yet  |
 | [NovelAll](https://www.novelall.com)  | Not Yet  |
 | [VolareNovels](https://www.volarenovels.com)  | Not Yet  |
-| [RoyalRoad](https://www.royalroad.com)  | Not Yet  |
-| [Tapread](http://www.tapread.com)  | Not Yet  |
+| [RoyalRoad](https://www.royalroad.com)  | Yes  |
+| [Tapread](http://www.tapread.com)  | Yes  |
 | [Wordybuzz](https://wordybuzz.com)  | Not Yet  |
 | [Tapas](https://tapas.io)  | Not Yet  |
 | [ChapterUpdates](https://www.chapterupdates.com)  | Not Yet  |
