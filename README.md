@@ -27,6 +27,8 @@ please dont forget to leave a review on google play to improve the app.
 * Text to speech is implemented.
 * More sources will be added later.
 * Text translator, read the novel in your favorit language.
+* Download novel and save it as an Epub
+* Read offline
 
 ## Issue
 * [Source request](https://github.com/AlenToma/NovelManager-public/issues/new?assignees=&labels=&template=source-request.md&title=)
