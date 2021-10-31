@@ -1,5 +1,5 @@
 # NovelManager
-![Icons](https://github.com/AlenToma/NovelManager-public/blob/main/Screenshots/Icons/res/mipmap-xhdpi/ic_launcher.png?raw=true)
+![Icons](https://raw.githubusercontent.com/AlenToma/NovelManager-public/master/Screenshots/Icons/res/mipmap-hdpi/ic_launcher.png)
 
  Massive Exclusive Novels from multiple source all here in this app.
 
@@ -27,6 +27,8 @@ please dont forget to leave a review on google play to improve the app.
 * Text to speech is implemented.
 * More sources will be added later.
 * Text translator, read the novel in your favorit language.
+* Download novel and save it as an Epub
+* Read offline
 
 ## Issue
 * [Source request](https://github.com/AlenToma/NovelManager-public/issues/new?assignees=&labels=&template=source-request.md&title=)
@@ -43,6 +45,7 @@ Those are the available sources and also sources that will be implemented in the
 | [ReadLightNovel](https://www.readlightnovel.cc)  | Yes  |
 | [ReadNovelFull](https://readnovelfull.com)  | Yes  |
 | [Wuxiaworld](https://www.wuxiaworld.com)  | Yes  |
+| [Wuxiaworld.Site](https://wuxiaworld.site)  | Yes  |
 | [NovelOnlineFull](https://novelonlinefull.com)  | Yes  |
 | [Comrademao](https://comrademao.com/mtype/chinese/)  | Yes  |
 | [WebNovelOnline](https://webnovelonline.com/)  | Not Yet  |
@@ -53,21 +56,17 @@ Those are the available sources and also sources that will be implemented in the
 | [Fsapk](https://fsapk.com)  | Not Yet  |
 | [NovelAll](https://www.novelall.com)  | Not Yet  |
 | [VolareNovels](https://www.volarenovels.com)  | Not Yet  |
-| [RoyalRoad](https://www.royalroad.com)  | Not Yet  |
-| [Tapread](http://www.tapread.com)  | Not Yet  |
+| [RoyalRoad](https://www.royalroad.com)  | Yes  |
+| [Tapread](http://www.tapread.com)  | Yes  |
 | [Wordybuzz](https://wordybuzz.com)  | Not Yet  |
 | [Tapas](https://tapas.io)  | Not Yet  |
 | [ChapterUpdates](https://www.chapterupdates.com)  | Not Yet  |
 
 <div>
-<img style="margin-left:5px" src="https://github.com/AlenToma/NovelManager-public/blob/main/Screenshots/Screenshot_20210221-201253_NovelManager.jpg" width="150">
-<img style="margin-left:5px" src="https://github.com/AlenToma/NovelManager-public/blob/main/Screenshots/Screenshot_20210221-201315_NovelManager.jpg" width="150">
-<img style="margin-left:5px" src="https://github.com/AlenToma/NovelManager-public/blob/main/Screenshots/Screenshot_20210221-201354_NovelManager.jpg" width="150">
-<img style="margin-left:5px" src="https://github.com/AlenToma/NovelManager-public/blob/main/Screenshots/Screenshot_20210221-201359_NovelManager.jpg" width="150">
-<img style="margin-left:5px" src="https://github.com/AlenToma/NovelManager-public/blob/main/Screenshots/Screenshot_20210221-201414_NovelManager.jpg" width="150">
-<img style="margin-left:5px" src="https://github.com/AlenToma/NovelManager-public/blob/main/Screenshots/Screenshot_20210221-201431_NovelManager.jpg" width="150">
-<img style="margin-left:5px" src="https://github.com/AlenToma/NovelManager-public/blob/main/Screenshots/Screenshot_20210221-201504_NovelManager.jpg" width="150">
-<img style="margin-left:5px" src="https://github.com/AlenToma/NovelManager-public/blob/main/Screenshots/Screenshot_20210221-201836_NovelManager.jpg" width="150">
+<img style="margin-left:5px" src="https://raw.githubusercontent.com/AlenToma/NovelManager-public/master/Screenshots/image1.jpeg" width="150">
+<img style="margin-left:5px" src="https://raw.githubusercontent.com/AlenToma/NovelManager-public/master/Screenshots/image2.jpeg" width="150">
+<img style="margin-left:5px" src="https://raw.githubusercontent.com/AlenToma/NovelManager-public/master/Screenshots/image3.jpeg" width="150">
+<img style="margin-left:5px" src="https://raw.githubusercontent.com/AlenToma/NovelManager-public/master/Screenshots/image4.jpeg" width="150">
  <div>
 
 
