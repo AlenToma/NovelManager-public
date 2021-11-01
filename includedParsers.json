@@ -16,6 +16,10 @@
         "debugOnly": false
     },
     {
+        "file": "BoxNovel",
+        "debugOnly": false
+    },
+    {
         "file": "AllNovel",
         "debugOnly": false
     },
