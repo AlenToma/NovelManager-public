@@ -69,6 +69,6 @@
     },
     {
         "file": "Wuxiaworld.Site",
-        "debugOnly": false
+        "debugOnly": true
     }
 ]
