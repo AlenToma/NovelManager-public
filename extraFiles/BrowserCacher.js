@@ -85,7 +85,7 @@ export class Bbrowser {
         for (var x of brs) {
           if (x.totalPages < this.maxPages) {
             return x; 
-            break;s
+            break;
           }
         }
  
