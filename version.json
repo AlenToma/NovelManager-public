@@ -1,0 +1,10 @@
+// version.json example
+// Note you will need to verify SSL works for Android <5 as it has SSL Protocol bugs
+// If it doesn't then you may be able to use Google Play Services to patch the SSL Provider, or just serve your updates over HTTP for Android <5
+// https://stackoverflow.com/a/36892715
+{
+  "versionName":"12.0",
+  "apkUrl":"https://github.com/NewApp.apk",
+  "forceUpdate": false,
+  "whatsNew": "The app is free, ads is removed and there will no longer be any need to buy or subscribe"
+}
