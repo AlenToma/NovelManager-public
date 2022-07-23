@@ -8,7 +8,6 @@ Read scenes from your favorite Webnovels, such as The King’s Avatar, Release t
 ## Download
 * [Android Release](https://github.com/AlenToma/NovelManager-public/releases)
 
-please dont forget to leave a review on google play to improve the app.
 
 ## Chats
 * [Facebook](https://www.facebook.com/groups/4251520684862135)
