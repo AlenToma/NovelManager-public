@@ -32,7 +32,7 @@ Read scenes from your favorite Webnovels, such as The King’s Avatar, Release t
 ## Develop new parsers
 Since release `12.0.0` novel manager is totally free.
 Developer could now create parsers package and use it in novelmanager instead of the current app parser.
-To do this please follow this guide here(url)
+To do this please follow this guide [here](https://github.com/AlenToma/NovelManager-public/blob/master/createNewPackage.md)
 
 ## Issue
 * [Source request](https://github.com/AlenToma/NovelManager-public/issues/new?assignees=&labels=&template=source-request.md&title=)
