@@ -6,7 +6,7 @@
 Read scenes from your favorite Webnovels, such as The King’s Avatar, Release that witch, and Battle Frenzy. Come to life as you jump into a wonderous world full-filed with comic and novel.
 
 ## Download
-* [Google Play](https://play.google.com/store/apps/details?id=com.novelmanager)
+* [Android Release](https://github.com/AlenToma/NovelManager-public/releases)
 
 please dont forget to leave a review on google play to improve the app.
 
