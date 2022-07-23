@@ -5,8 +5,8 @@ With NovelManager, developer will be able to create and develop their own parser
 Follow this guide to know how to develop and apply the package to novelmanager.
 
 * 1- create your parsers for this please follow the template [parser template example](https://github.com/AlenToma/NovelManager-public/tree/master/parser%20template%20example)
-* 2- When you are done, download and install [base64packagemaker]() 
-* 3- with [base64packagemaker]() you be able to create a package.
+* 2- When you are done, download and install [base64packagemaker](https://github.com/AlenToma/base64string-package-maker/releases/tag/1.0.6) 
+* 3- with [base64packagemaker](https://github.com/AlenToma/base64string-package-maker/releases/tag/1.0.6) you be able to create a package.
 * 4- Upload the package to your favorit server or your own github.
 * 5- In novelManager go to settings and select `Parsers Package URL`
 * 6- Fill the PackageUrl and the encrytion Key that you created the package with and press submit.
