@@ -15,6 +15,8 @@ Follow this guide to know how to develop and apply the package to novelmanager.
 ## Classes and it properties propeties
 Now if you look at the template you will find classes that are passed on to the parsers that you could use like `Section, Chapter, HttpClient, DetaliItem, LightItem, ParserSearchSettings, Filter, labelValue, DetaliItemType, NovelReviews`
 
+note that `this.parser.jq` return [node-html-scraper](https://www.npmjs.com/package/node-html-scraper) 
+
 ## Section
 `constructor(name: string, text:string, identifier: "Search" | "Latest", mandatory?: boolean, filter?: Filter)`
 
