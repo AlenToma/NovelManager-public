@@ -6,9 +6,8 @@
 Read scenes from your favorite Webnovels, such as The King’s Avatar, Release that witch, and Battle Frenzy. Come to life as you jump into a wonderous world full-filed with comic and novel.
 
 ## Download
-* [Google Play](https://play.google.com/store/apps/details?id=com.novelmanager)
+* [Android Release](https://github.com/AlenToma/NovelManager-public/releases)
 
-please dont forget to leave a review on google play to improve the app.
 
 ## Chats
 * [Facebook](https://www.facebook.com/groups/4251520684862135)
@@ -29,6 +28,11 @@ please dont forget to leave a review on google play to improve the app.
 * Text translator, read the novel in your favorit language.
 * Download novel and save it as an Epub
 * Read offline
+
+## Develop new parsers
+Since release `12.0.0` novel manager is totally free.
+Developer could now create parsers package and use it in novelmanager instead of the current app parser.
+To do this please follow this guide [here](https://github.com/AlenToma/NovelManager-public/blob/master/createNewPackage.md)
 
 ## Issue
 * [Source request](https://github.com/AlenToma/NovelManager-public/issues/new?assignees=&labels=&template=source-request.md&title=)
