@@ -15,7 +15,7 @@ Read scenes from your favorite Webnovels, such as The King’s Avatar, Release t
 ## Features
 
 * Search Novels from multiple sources.
-* View novel detalj and read other people views on the novel.
+* View novel detail and read other people views on the novel.
 * Mark as favorit from diffrent sources.
 * History about all your readed novels.
 * Read novels.
