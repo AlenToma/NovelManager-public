@@ -1,6 +1,6 @@
 {
-  "versionName":"12.0.2",
+  "versionName":"12.0.3",
   "apkUrl":"https://github.com/AlenToma/NovelManager-public/releases/download/Release/app-release.apk",
   "forceUpdate": false,
-  "whatsNew": "The app is free, ads is removed and there will no longer be any need to buy or subscribe"
+  "whatsNew": "Added google fonts and Chapter Progress Indicator to know how much % have you read throw chapter"
 }
