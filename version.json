@@ -1,5 +1,5 @@
 {
-  "versionName":"12.0.4",
+  "versionName":"12.0.5",
   "apkUrl":"https://github.com/AlenToma/NovelManager-public/releases/download/Release/app-release.apk",
   "forceUpdate": false,
   "whatsNew": "Added google fonts and Chapter Progress Indicator to know how much % have you read throw chapter"
