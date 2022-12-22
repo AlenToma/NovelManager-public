@@ -1,5 +1,5 @@
 export default (Section, Chapter, HttpClient, DetaliItem, LightItem, ParserSearchSettings, Filter, labelValue, DetaliItemType, NovelReviews, client, ImageHandler, parseHtml) => {
-	// this plug in I personly use, is app to you use it on your parsers 
+	// this plug in I personly use, is upp to you to use it. Use it on your parsers 
     function Plugin() {
         this.type = "--plugin--";
         this.name = "Cleaner";
