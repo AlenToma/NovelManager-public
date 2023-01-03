@@ -1,6 +1,6 @@
 {
-  "versionName":"12.1.5",
+  "versionName":"12.1.6",
   "apkUrl":"https://github.com/AlenToma/NovelManager-public/releases/download/Release/app-release.apk",
   "forceUpdate": false,
-  "whatsNew": "\n\nAdded google fonts and Chapter Progress Indicator to know how much % have you read throw chapter.*Added Statusbar that display clock and battery level."
+  "whatsNew": "\n\nDesign improvments
 }
