@@ -34,6 +34,14 @@ Since release `12.0.0` novel manager is totally free.
 Developer could now create parsers package and use it in novelmanager instead of the current app parser.
 To do this please follow this guide [here](https://github.com/AlenToma/NovelManager-public/blob/master/createNewPackage.md)
 
+## Settings upp your own local database api
+Start by downloading `NovelManager.Sqllite.api` and then simple open powershell cd to `NovelManager.Sqllite.api` and run `npm install` and then run
+`node dist/Server.js path='E:\\Database\\NovelManager\\' port=51189`
+
+In the app you input your own local/public ip in the `API settings` sections and then restart the app.
+
+Note: to use public Ip do not forget to port forword your ip in the router.
+
 ## Issue
 * [Source request](https://github.com/AlenToma/NovelManager-public/issues/new?assignees=&labels=&template=source-request.md&title=)
  
