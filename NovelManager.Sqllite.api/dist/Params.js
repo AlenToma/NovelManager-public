@@ -17,15 +17,21 @@ class Params {
         });
         this.save();
     }
-    start() {
+    getPath() {
         const settingsFilePath = "./configs/paramsSettings.json";
+        if (!fs_1.default.existsSync("./configs"))
+            fs_1.default.mkdirSync("./configs");
+        return settingsFilePath;
+    }
+    start() {
+        const settingsFilePath = this.getPath();
         if (fs_1.default.existsSync(settingsFilePath)) {
             const settings = JSON.parse(fs_1.default.readFileSync(settingsFilePath, 'utf8'));
             Object.keys(settings).forEach(x => this[x] = settings[x]);
         }
     }
     save() {
-        const settingsFilePath = "./configs/paramsSettings.json";
+        const settingsFilePath = this.getPath();
         fs_1.default.writeFileSync(settingsFilePath, JSON.stringify(this), 'utf8');
         return this;
     }

@@ -9,9 +9,8 @@ import fs from 'fs'
 import cors from 'cors'
 
 const app = express();
-
-let db = new Database();
 const params = new Params(argv, "path", "port", "host") as any;
+let db = new Database();
 app.use(cors());
 app.use(express.json());
 app.use(FileUpload());
@@ -116,10 +115,4 @@ const PORT = params.port || process.env.PORT || 8181;
 app.listen(PORT, () => {
     console.log(`Server listening on port ${PORT}...`, params);
 });
-var options = {
-    pfx: fs.readFileSync('./configs/test.pfx'),
-    passphrase: 'test'
-};
-
-Https.createServer(options, app).listen(443);
 

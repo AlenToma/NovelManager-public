@@ -9,12 +9,10 @@ const node_process_1 = require("node:process");
 const express_fileupload_1 = __importDefault(require("express-fileupload"));
 const Params_1 = __importDefault(require("./Params"));
 const path_1 = __importDefault(require("path"));
-const https_1 = __importDefault(require("https"));
-const fs_1 = __importDefault(require("fs"));
 const cors_1 = __importDefault(require("cors"));
 const app = (0, express_1.default)();
-let db = new Database_1.default();
 const params = new Params_1.default(node_process_1.argv, "path", "port", "host");
+let db = new Database_1.default();
 app.use((0, cors_1.default)());
 app.use(express_1.default.json());
 app.use((0, express_fileupload_1.default)());
@@ -105,9 +103,4 @@ const PORT = params.port || process.env.PORT || 8181;
 app.listen(PORT, () => {
     console.log(`Server listening on port ${PORT}...`, params);
 });
-var options = {
-    pfx: fs_1.default.readFileSync('./configs/test.pfx'),
-    passphrase: 'test'
-};
-https_1.default.createServer(options, app).listen(443);
 //# sourceMappingURL=Server.js.map
