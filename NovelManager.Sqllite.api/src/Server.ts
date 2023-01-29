@@ -10,7 +10,7 @@ import cors from 'cors'
 
 const app = express();
 const params = new Params(argv, "path", "port", "host") as any;
-let db = new Database();
+let db = new Database(undefined, params.path);
 app.use(cors());
 app.use(express.json());
 app.use(FileUpload());

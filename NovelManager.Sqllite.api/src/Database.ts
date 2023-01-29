@@ -22,11 +22,10 @@ export default class Database {
     promise(func: (resolve: (data, error?: any) => void) => void | Promise<void>) {
         return (new Promise((resolve, reject) => {
             func((data: any, error: any) => {
-                if (error)
-                    {
-                        console.error(error);
-                        reject(error);
-                    }
+                if (error) {
+                    console.error(error);
+                    reject(error);
+                }
                 else resolve(data);
             });
         }))
@@ -105,8 +104,10 @@ export default class Database {
         try {
 
             if ((!this.name || !this.path) && this.serviceProp.name) {
-                this.name = this.serviceProp.name;
-                this.path = this.serviceProp.path;
+                if (this.serviceProp.name)
+                    this.name = this.serviceProp.name;
+                if (this.serviceProp.path)
+                    this.path = this.serviceProp.path;
             }
 
             if (!this.db || this.closed)

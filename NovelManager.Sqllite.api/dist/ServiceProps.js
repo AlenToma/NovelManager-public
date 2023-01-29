@@ -19,7 +19,7 @@ class ServiceProp {
         }
     }
     save() {
-        if (!this.name || !this.path)
+        if (!this.name && !this.path)
             return this;
         const settingsFilePath = "./configs/settings.json";
         fs_1.default.writeFileSync(settingsFilePath, JSON.stringify(this), 'utf8');

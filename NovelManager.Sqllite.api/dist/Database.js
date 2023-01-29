@@ -92,8 +92,10 @@ class Database {
     open() {
         try {
             if ((!this.name || !this.path) && this.serviceProp.name) {
-                this.name = this.serviceProp.name;
-                this.path = this.serviceProp.path;
+                if (this.serviceProp.name)
+                    this.name = this.serviceProp.name;
+                if (this.serviceProp.path)
+                    this.path = this.serviceProp.path;
             }
             if (!this.db || this.closed)
                 this.db = new sqlite3.Database(`${this.path}${this.name}`);
