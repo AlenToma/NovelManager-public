@@ -1,0 +1,25 @@
+{
+  "name": "sqlite.api",
+  "version": "1.0.0",
+  "description": "an api for novelmanager",
+  "main": "dist/Server.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node dist/Server.js path='E:\\Database\\NovelManager\\' port=51189 host=192.168.1.59",
+    "install": "npx tsc"
+  },
+  "author": "Alen.Toma",
+  "license": "MIT",
+  "dependencies": {
+    "@types/express-fileupload": "^1.4.1",
+    "cors": "^2.8.5",
+    "express": "^4.18.2",
+    "express-fileupload": "^1.4.0",
+    "sqlite3": "^5.1.4"
+  },
+  "devDependencies": {
+    "@types/node": "^18.11.18",
+    "@types/sqlite3": "^3.1.8",
+    "typescript": "^4.9.4"
+  }
+}
