@@ -75,12 +75,13 @@ app.post("/select", (req, res) => {
     db.select(body.sql, body.args).then(x => res.json(x)).catch(x => res.status(500).send(x));
 });
 
-app.post("/download", function (req, res) {
+app.get("/download", function (req, res) {
     const options = {
-        root: Path.join(params.path)
+        root: params.path
     };
 
-    const fileName = db.name;
+    const fileName = db.name || db.serviceProp.name;
+    console.info(options, fileName)
     res.sendFile(fileName, options, function (err) {
         if (err) {
             console.error(err);

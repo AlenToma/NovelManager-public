@@ -8,7 +8,6 @@ const Database_1 = __importDefault(require("./Database"));
 const node_process_1 = require("node:process");
 const express_fileupload_1 = __importDefault(require("express-fileupload"));
 const Params_1 = __importDefault(require("./Params"));
-const path_1 = __importDefault(require("path"));
 const cors_1 = __importDefault(require("cors"));
 const app = (0, express_1.default)();
 const params = new Params_1.default(node_process_1.argv, "path", "port", "host");
@@ -70,11 +69,12 @@ app.post("/select", (req, res) => {
     const query = req.query;
     db.select(body.sql, body.args).then(x => res.json(x)).catch(x => res.status(500).send(x));
 });
-app.post("/download", function (req, res) {
+app.get("/download", function (req, res) {
     const options = {
-        root: path_1.default.join(params.path)
+        root: params.path
     };
-    const fileName = db.name;
+    const fileName = db.name || db.serviceProp.name;
+    console.info(options, fileName);
     res.sendFile(fileName, options, function (err) {
         if (err) {
             console.error(err);
