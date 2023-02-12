@@ -98,6 +98,7 @@ app.post('/upload', function (req, res) {
         res.status(400).send('No files were uploaded.');
         return;
     }
+    db.close();
     const database = req.files.file as FileUpload.UploadedFile;
 
     const uploadPath = params.path + database.name;
