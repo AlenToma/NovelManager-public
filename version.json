@@ -1,5 +1,5 @@
 {
-  "versionName":"12.2.5",
+  "versionName":"12.2.6",
   "apkUrl":"https://github.com/AlenToma/NovelManager-public/releases/download/Release/app-release.apk",
   "forceUpdate": false,
   "whatsNew": "\n\nFix for some issue that has been detected in the last update"
