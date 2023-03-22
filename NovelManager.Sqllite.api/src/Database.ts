@@ -36,6 +36,7 @@ export default class Database {
             this.open().serialize(async () => {
                 try {
                     let errors = undefined;
+                    console.info("exec", query)
                     const promises = query.map(x => this.promise((sResolve) => {
                         this.db.run(x.sql, x.args, function (error) {
                             errors = error;

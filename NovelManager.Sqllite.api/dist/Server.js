@@ -73,6 +73,7 @@ app.get("/download", function (req, res) {
     const options = {
         root: params.path
     };
+    console.log("download");
     const fileName = db.name || db.serviceProp.name;
     console.info(options, fileName);
     res.sendFile(fileName, options, function (err) {
@@ -90,13 +91,16 @@ app.post('/upload', function (req, res) {
         res.status(400).send('No files were uploaded.');
         return;
     }
+    console.log("Uploading");
     db.close();
     const database = req.files.file;
     const uploadPath = params.path + database.name;
     database.mv(uploadPath, function (err) {
         if (err) {
+            console.error(err);
             return res.status(500).send(err);
         }
+        console.log('File uploaded to ', uploadPath);
         res.status(200).send('File uploaded to ' + uploadPath);
     });
 });
