@@ -60,3 +60,5 @@ Note: to use public Ip do not forget to port forword your ip in the router.
 As you see the application only display what the plugins sends. For those who want to buy the source code for the app, then leave a message and we could talk about it. 
 
 Note: I will be selling the source code and also help understanding the code, you will not own the rights for the app meanings I could also sell it to others. 
+
+The app is build with React-native and expo, I have only build an android version and have not tried ios as I do not own mac, but you should not have any issue with building an ios version  as I do not have any native code and only js. 
