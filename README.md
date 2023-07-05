@@ -56,4 +56,7 @@ Note: to use public Ip do not forget to port forword your ip in the router.
 <img style="margin-left:5px" src="https://raw.githubusercontent.com/AlenToma/NovelManager-public/master/Screenshots/image4.jpeg" width="150">
  <div>
 
+## Buy the source code
+As you see the application only display what the plugins sends. For those who want to buy the source code for the app, then leave a message and we could talk about it. 
 
+Note: I will be selling the source code and also help understanding the code, you will not own the rights for the app meanings I could also sell it to others. 
